@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: artifactory-config
+data:
+  system.yaml: |
+    shared:
+      database:
+        driver: org.postgresql.Driver
+        type: postgresql
+        url: jjdbc:postgresql://postgresql:5432/artifactorydb
+        username: artifactory
+        password: "${POSTGRES_PASSWORD}"

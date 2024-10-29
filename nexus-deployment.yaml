@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus
+  labels:
+    app: nexus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nexus
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      containers:
+      - name: nexus
+        image: sonatype/nexus3:latest
+        ports:
+        - name: nexus-web
+          containerPort: 8081
+        - name: nexus-docker
+          containerPort: 8082
+        volumeMounts:
+        - mountPath: /nexus-data
+          name: nexus-data
+      volumes:
+      - name: nexus-data
+        persistentVolumeClaim:
+          claimName: nexus-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus-service
+spec:
+  selector:
+    app: nexus
+  ports:
+    - name: nexus-web
+      protocol: TCP
+      port: 8081
+      targetPort: 8081
+    - name: nexus-docker
+      protocol: TCP
+      port: 8082
+      targetPort: 8082
+  type: ClusterIP
