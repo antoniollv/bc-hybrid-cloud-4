@@ -127,7 +127,7 @@ kubectl get pvc
 
 La forma más simple de tener un `Deployment` **Jenkins** en nuestro nodo **Microk8s** sería ejecutando
 
-`mkctl create deployment jenkins --image jenkins/jenkins`
+`kubectl create deployment jenkins --image jenkins/jenkins`
 
 Pero queremos asignarle el **PVC** creado anteriormente para ello realizamos una _ejecución seca_ y modificamos el archivo *YAML* resultante, para agregar el volumen.
 
@@ -333,3 +333,19 @@ az ad sp create-for-rbac --name "azure-sp" \
 ---
 Ruta almacenamiento
 /var/snap/microk8s/common/default-storage
+
+---
+
+Crear deployment nexus
+
+```Bash
+kubectl apply -f nexus-pvc.yaml
+kubectl apply -f nexus-deployment.yaml
+```
+
+Obtener el Password del administrador
+
+```BAsh
+kubectl get pods
+kubectl exec -it <nexus-pod-name> -- cat /nexus-data/admin.password
+```
