@@ -373,53 +373,52 @@ kubectl exec -it <nexus-pod-name> -- cat /nexus-data/admin.password
   
 ---
 kubectl create deployment petclinic --image nexus-service:8082/repository/docker/spring-petclinic:latest
-Jkubectl expose deployment jenkins --port 8080 --target-port 8080 --selector app=jenkins --type ClusterIP --name jenkins
+kkubectl expose deployment petclinic --port 8080 --target-port 8888 --selector app=petclinic --type ClusterIP --name petclinic
 
 ---
 
-Problema s de resolución de DNS en MicroK8s
-La resolución DNS en MicroK8s se encarga de permitir que los servicios y pods dentro del clúster puedan resolverse mutuamente por nombre en lugar de depender únicamente de direcciones IP. Si tienes habilitado el DNS en MicroK8s (`microk8s enable dns`), pero la IP de un contenedor no se está resolviendo, podría deberse a varios factores. Aquí hay algunas posibles causas y soluciones:
+## Resolviendo problemas de resolución de DNS en MicroK8s
 
-1. **Verificar el Pod de CoreDNS**: En MicroK8s, el servicio DNS normalmente lo proporciona CoreDNS. Puedes verificar que el pod de CoreDNS esté corriendo con:
+La resolución DNS en MicroK8s se encarga de permitir que los servicios y pods dentro del clúster puedan resolverse mutuamente por nombre en lugar de direcciones IP.
 
-   ```bash
+Habilitar el DNS en MicroK8s `microk8s enable dns`. Con `microk8s status` comprobamos el estado
+
+Algunas posibles causas y soluciones si falla la resolución DNS
+
+1. **Verificar el Pod de CoreDNS**: En MicroK8s, el servicio DNS lo proporciona CoreDNS. Verificar que el pod de CoreDNS esté corriendo:
+
+   ```Bash
    microk8s kubectl get pods -n kube-system
    ```
 
-   Asegúrate de que el pod esté en estado `Running`. Si muestra errores, revisa los logs con:
+   El pod debe estar en estado `Running`. Si muestra errores, revisar los logs:
 
-   ```bash
+   ```Bash
    microk8s kubectl logs -n kube-system <nombre_del_pod_coredns>
    ```
 
-2. **Revisar Configuración del Servicio DNS**: Verifica que el servicio DNS esté activo y que tenga una IP ClusterIP asociada. Para ello, ejecuta:
+2. **Revisar Configuración del Servicio DNS**: Verifica que el servicio DNS esté activo y que tenga una IP ClusterIP asociada:
 
-   ```bash
+   ```Bash
    microk8s kubectl get svc -n kube-system
    ```
 
    Busca un servicio llamado `kube-dns`. Debe tener una IP y el tipo de servicio debe ser `ClusterIP`.
 
-3. **Probar Resolución DNS Interna**: Dentro del clúster, puedes ejecutar un contenedor de prueba y usar herramientas como `nslookup` o `dig` para verificar la resolución de nombres. Un ejemplo de esto sería:
+3. **Probar Resolución DNS Interna**: Dentro del clúster, se puede ejecutar un contenedor de prueba y usar herramientas como `nslookup` o `dig` para verificar la resolución de nombres. Ejemplo:
 
-   ```bash
+   ```Bash
    microk8s kubectl run -i --tty busybox --image=busybox --restart=Never -- sh
    ```
 
-   Una vez dentro del contenedor de prueba, usa:
+   Una vez dentro del contenedor:
 
-   ```bash
+   ```Bash
    nslookup <nombre_del_servicio>.<namespace>.svc.cluster.local
    ```
 
-   Esto ayuda a confirmar si el DNS dentro del clúster está funcionando.
+4. **Reiniciar CoreDNS**: Si se detecta algún problema, reiniciar el pod de CoreDNS. Eliminar el pod, y Kubernetes lo recrea automáticamente:
 
-4. **Reiniciar CoreDNS**: Si detectas algún problema, intenta reiniciar el pod de CoreDNS. Puedes eliminar el pod, y Kubernetes debería recrearlo automáticamente:
-
-   ```bash
+   ```Bash
    microk8s kubectl delete pod -n kube-system <nombre_del_pod_coredns>
    ```
-
-5. **Comprobar Configuración de red de MicroK8s**: Algunas veces, conflictos en la configuración de red de MicroK8s pueden afectar el DNS. Verifica que no haya conflictos de IP o configuraciones que impidan la comunicación entre los pods y CoreDNS.
-
-Si estos pasos no resuelven el problema, avísame para explorar otras posibles causas.
