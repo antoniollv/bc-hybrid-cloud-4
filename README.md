@@ -486,7 +486,110 @@ Habremos conseguido dos cosas:
 
 #### Test unitarios
 
-Aseguremos que el plugin JUnit este instalado
+En esta sección añadiremos una etapa en la que se recopila la información obtenida de la ejecución de los test unitarios, aquellos que añaden los desarrolladores para comprobar el correcto funcionamiento de la aplicación
+
+Ya estará instalado, al venir con los plugins sugerido en la configuración inicial de Jenkins, pero nos aseguremos que el plugin **JUnit** este instalado
+
+- En _Panel de Control_ -> _Administrar Jenkins_, Opción **Plugins**
+
+- En _Installed plugins_, Buscar:
+
+  - JUnit Plugin
+
+De no encontrarse instalado en - En _Availabe plugins_, lo buscamos, seleccionamos e instalamos
+
+Esta vez no basta con agregar una nueva etapa al Jenkisfile debemos añadir la dependencia Junit al archivo pom.xml de repositorio
+
+En _dependencies_
+
+```xml
+<dependency>
+  <groupId>org.junit.jupiter</groupId>
+  <artifactId>junit-jupiter</artifactId>
+  <version>5.11.3</version>
+  <scope>test</scope>
+</dependency>
+```
+
+En _plugins_
+
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-surefire-plugin</artifactId>
+  <version>3.5.1</version>
+  <configuration>
+    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+  </configuration>
+</plugin>
+```
+
+Y añadimos una nueva etapa, `stage('Unit Tests')`
+
+```Groovy
+stage('Unit Tests') {
+    when {
+        branch 'main'
+        branch 'develop'
+    }
+    steps {
+        container('maven') {
+            println '03# Stage - Unit Tests'
+            println '(develop y main): Launch unit tests.'
+            sh '''
+                mvn test
+            '''
+            junit '**/target/surefire-reports/*.xml'
+        }
+    }
+}
+```
+
+Si reemplaza el archivo `Jenkinsfile` por el archivo `Jenkisfile.unittest` de este repositorio y lo examinas, veras que se han añadido una condiciones de ejecución por ramas, para reducir los tiempos de ejecución de la _Pipeline_. Ya se desharán los cambios más adelante
+
+#### Despliegue de un servicio Nexus en MicroK8s
+
+Antes de abordar la siguiente etapa vamos a abordar el despliegue de un servicio **Nexus** en **MicroK8s**
+
+**Nexus** proporciona un repositorios de artefactos **Maven** y de imágenes de contenedor. Utilizaremos este servicio para publicar los artefactos generado en nuestra **_Pipeline
+_**
+En los archivos **YAMLs** proporcionados ya se encuentra la definición de los servicio
+
+Crear deployment nexus
+
+```Bash
+kubectl apply -f nexus-pvc.yaml
+kubectl apply -f nexus-deployment.yaml
+```
+
+Obtenemos la ip del servicio **Nexus**
+
+```Bash
+kubectl get all
+```
+
+Y accedemos al puerto http 8081
+
+Url Nexus [http://IP_SERVICIO_NEXUS:80081]
+
+Obtener el Password del administrador
+
+```BAsh
+kubectl get pods
+kubectl exec -it <NEXUS_POD_NAME> -- cat /nexus-data/admin.password
+```
+
+Una vez hemos accedido a la interfaz de **Nexus**. Debemos realizar las siguientes acciones
+
+- Establecer un nuevo password al usuario _admin_, no lo compliques mucho deberás recordarlo posteriormente de
+- Crear un repositorio para imágenes de contenedor tipo Docker
+- Configura la seguridadREAL
+- permitir acceso anonymouse
+- Configurar los repositoiros **Docker** y **Maven**
+
+- En el nodo **MicroK8s** permitir repositorios de imágenes inseguros
+
+Cabe destacar que todas estas acciones van en contra de la buenas practicas en materia de seguridad, se realizan aquí de esta forma, en este momento con el fin de no añadir aun más complejidad al _tema_
 
 ---
 
@@ -508,23 +611,7 @@ Ruta almacenamiento
 
 ---
 
-Crear deployment nexus
-
-```Bash
-kubectl apply -f nexus-pvc.yaml
-kubectl apply -f nexus-deployment.yaml
-```
-
-Obtener el Password del administrador
-
-```BAsh
-kubectl get pods
-kubectl exec -it <nexus-pod-name> -- cat /nexus-data/admin.password
-```
-
----
-
-### Agregar Container Template Kaniko y Kubectl
+### Agregar Container Template Kaniko
 
 - En _Panel de Control_ -> _Administrar Jenkins_ -> _kubernetes_ -> _Pod Templates_, **pod-default**
 
@@ -535,14 +622,7 @@ kubectl exec -it <nexus-pod-name> -- cat /nexus-data/admin.password
     - Command to run: cat
     - Arguments to pass to the command: _En blanco_
     - Allocate pseudo-TTY: true
-  - Add Container
-    - Name: kubectl
-    - Docker image: bitnami/kubectl:latest
-    - Working directory: /home/jenkins/agent
-    - Command to run: cat
-    - Arguments to pass to the command: _En blanco_
-    - Allocate pseudo-TTY: true
-  
+
 ---
 
 ## Configuración para ejecutar kubectl en contenedor
