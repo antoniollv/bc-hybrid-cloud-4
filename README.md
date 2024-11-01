@@ -2,11 +2,11 @@
 
 Para el seguimiento de esta tema  será necesario disponer de una cuenta personal en **Github**. Si no dispones aún de una puedes crearla gratuitamente en [https://github.com/]
 
-Añade a tu cuenta personal de **GitHub** un _Fork_ del repositorio [https://github.com/spring-projects/spring-petclinic]. Será nuestra aplicación de ejemplo para abordar los procesos _CI/CD_
+Añade a tu cuenta personal de **GitHub** un _Fork_ del repositorio [https://github.com/spring-projects/spring-petclinic] (público). Será nuestra aplicación de ejemplo para abordar los procesos _CI/CD_
 
 También será necesario instalar un servidor **Jenkins**. El método que emplearemos será un _deployment_ en un nodo local de **Kubernetes** que use un _persistentVolumeClaim_ para la persistencia de datos, al cual se le definirá un _service_ de tipo _clusterIP_ para acceder a la consola de **Jenkins**. La instalación del servicio **Jenkins** se abordará al inicio del tema
 
-Para la instalación del nodo local **Kubernetes** se recomienda instalar **Microk8s**. En **Ubuntu 24.04LTS**, nuestro S.O. de referencia la instalación y comprobación del estado del nodo se realiza con unos pocos pasos
+Para la instalación del nodo local **Kubernetes** se recomienda instalar **Microk8s**. En **Ubuntu 24.04LTS**, nuestro S.O. de referencia, la instalación y comprobación del estado del nodo se realiza con unos pocos pasos
 
 Enlaces:
 
@@ -15,22 +15,39 @@ Enlaces:
 - Visual Estudio Code [https://code.visualstudio.com]
 - MikroK8s [https://microk8s.io]
 
+## Objetivos
+
+- [x] Instalación de **MicroK8s** sobre **Ubuntu 24.04 LTS**
+
+- [x] Desplegar un servicio **Jenkins** con persistencia de datos accesible mediante **_service ClusterIP_**
+
+- [x] Crear un proceso CI/CD del un _Fork_ del proyecto [https://github.com/spring-projects/spring-petclinic] que incluya
+
+  - [x] Construcción (Maven Build)
+  - [x] Test Unitarios (Maven Test)
+  - [x] Publicación (Publish in Nexus)
+  - [x] Construcción imagen de contenedor (Docker Build)
+  - [x] Publicación de la imagen de contenedor (Docker Push)
+  - [x] Despliegue de un contenedor de la aplicación (Kubernetes Deployment)
+  - [] Test de validación
+  - [] Promoción de entorno (Development -> Production)
+
 ## Configuración Ubuntu 24.04 LTS
 
 Configuración e instalación de las utilidades
 
 ### oh-my-bash
 
-Resulta de utilidad disponer de esta extensión al Shell Bash para trastear con Git, o oh-my-zsh si de prefiere el Shell Zsh
+`oh-my-bash`, es una extensión al **shell Bash**, resulta de utilidad disponer de esta extensión cuando _trasteamos_ con **Git**, `oh-my-zsh` si de prefiere el **shell Zsh**
 
-Instalación 
+Instalación
 
 ```Bash
 sudo apt install vim curl git terminator fonts-powerline
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 ```
 
-Edita `~/.bashrc` para actualizar el valor de `OSH_THEME` por el tema deseado, línea:
+Edita `~/.bashrc`, con **vim** en el ejemplo, para actualizar el valor de `OSH_THEME` por el tema deseado, línea:
 
 ```Bash
 vi ~/.bashrc
@@ -40,15 +57,33 @@ vi ~/.bashrc
 OSH_THEME="powerline"
 ```
 
-#### MS Code
+`source ~/.bashrc` Para aplicar los cambios
 
-Descargar del enlace la versión `.dev` e instalar con `apt`
+### MS Code
+
+Pudiendo seguir el _tema_, en cualquier otro _IDE_ o editor, MS Code, es una opción ligera y versátil.
+
+Descargar de [https://code.visualstudio.com] la versión `.dev` e instalar con `apt`
 
 ```Bash
 apt install ./<archivo_code_descargado>.dev
 ```
 
+Una vez instalado lanzar el _IDE_, por ejemplo ejecutado `code`
+
+Es recomendable instalar las siguientes extensiones, que facilitan trabajar con repositorios _Git_
+
+- Git Graph
+
+- GitLens - Git supercharged
+
+Podemos hacerlo pulsando la rueda dentada de la barra de menu de la izquierda y seleccionado _extensiones_ ( Crtl + Mayús + X ), y buscar las extensiones en el Marketplace
+
 ### microk8s.ioc
+
+Como el sistema operativo de los equipos facilitados para la realización del _tema_ ha sido **Ubuntu 24.04 LTS**, la plataforma **Kubernetes** elegida ha sido [MicroK8s](https://microk8s.io), por su simplificación a la hora de la instalación, versatilidad y cumplimiento de los estándares **Kubernetes**, en este S.O.
+
+Instalación, configuración inicial, y comandos de gestión
 
 ```Bash
 sudo snap install microk8s --classic
@@ -83,23 +118,47 @@ microk8s reset
 microk8s stop
 ```
 
-#### Configurar PersistentVolume (PV) en MicroK8s
+## Instalación y configuración de Jenkins en MicroK8s
+
+Una vez tenemos el SO preparado procedemos a la instalación de **Jenkins** sobre **MicroK8s**
+
+Configura **Git** si aun lo has hecho
+
+```Bash
+git config --global user.name "Nombre del usuario"
+git config --global user.email "mail@dominio.net"
+git config --global http.sslverify false
+git config --global credential.helper store
+```
+
+Clona este repositorio a tu equipo `git clone https://github.com/antoniollv/bc-hybrid-cloud-4.git`
+
+Lanza MS Code en el directorio del repositorio
+
+```Bash
+cd bc-hybrid-cloud-4
+code .
+```
+
+El repositorio en su rama `main` a parte del presente documento, `README.md`, contiene los distintos **YAMLs** que iremos adaptando y aplicando para desplegar la infraestructura que emplearemos en nuestro proceso CI/CD
+
+EL primer paso es desplegar nuestra herramienta de automatización, **Jenkins**, que necesitará persistencia de datos para no perder los avances
+
+### Configurar PersistentVolume (PV) en MicroK8s
 
 - Activar el complemento `hostpath-storage` en **MicroK8s**
 
   `kubectl get pods -n kube-system | grep 'hostpath-provisioner'`
   
-  Debe mostrar un pod `hostpath-provisioner` en el espacio de nombres `kube-system`, lo que indica que el complemento está activo.
+  Debe mostrar un pod `hostpath-provisioner` en el espacio de nombres `kube-system`, lo que indica que el complemento está activo
 
-  EN canso contrario activar con el comando
-
-  `microk8s enable hostpath-storage`
+  EN canso contrario activar con el comando `microk8s enable hostpath-storage`
 
 - Crear un PersistentVolumeClaim (PVC)
 
   En **MicroK8s**, no es necesario definir un **PV** manualmente porque el complemento `hostpath-storage` crea automáticamente un **PV** cuando se hace una solicitud de `PersistentVolumeClaim`
 
-  Para crear un `PersistentVolumeClaim` creamos un archivo **YAML** con su definición por ejemplo `jenkins-pvc.yaml`
+  Para crear un `PersistentVolumeClaim` utilizaremos el archivo **YAML** `jenkins-pvc.yaml`
 
 ```Yaml
 apiVersion: v1
@@ -112,7 +171,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi  # Define la cantidad de almacenamiento que necesitas
+      storage: 5Gi  # Aquí defines la cantidad de almacenamiento que tendrá el volumen, no te quedes corto
   storageClassName: microk8s-hostpath
 ```
 
@@ -123,15 +182,17 @@ kubectl apply -f jenkins-pvc.yaml
 kubectl get pvc
 ```
 
-## Jenkins Deployment
+### Jenkins Deployment
 
 La forma más simple de tener un `Deployment` **Jenkins** en nuestro nodo **Microk8s** sería ejecutando
 
 `kubectl create deployment jenkins --image jenkins/jenkins`
 
-Pero queremos asignarle el **PVC** creado anteriormente para ello realizamos una _ejecución seca_ y modificamos el archivo *YAML* resultante, para agregar el volumen.
+Pero queremos asignarle el **PVC** creado anteriormente, para ello se realiza una _ejecución seca_, se redirige la salida a archivo y modificamos el archivo ***YAML*** resultante, para agregar el volumen.
 
 `kubectl create deployment jenkins --image=jenkins/jenkins --dry-run=client -o yaml > jenkins-deployment.yaml`
+
+Una vez editado `jenkins-deployment.yaml` lo dejamos de este modo
 
 **_jenkins-deployment_**
 
@@ -163,6 +224,8 @@ spec:
           claimName: jenkins-pvc
 ```
 
+Lo encontraras ya modificado en el repositorio
+
 Aplicamos el archivo y comprobamos que tanto el pod como el deployment están disponibles
 
 ```Bash
@@ -184,7 +247,7 @@ Url de acceso a **Jenkins** [http://IP_SERVICE:8080)]
 
 ## Configuración y primero pasos con Jenkins
 
-Para desbloquear **Jenkins** debemos obtener la contraseña de inicio, para ellon seguiremos las indicaciones mostradas en la **URL** del **Jenkins**.
+Para desbloquear **Jenkins** debemos obtener la contraseña de inicio, para ello seguiremos las indicaciones mostradas en la **URL** del **Jenkins**.
 
 Bastará con realizar `cat` sobre el archivo indicado en el `pod` de **Jenkins**
 
@@ -199,12 +262,16 @@ Para finalizar la instalación seguimos los pasos del asistente de configuració
 
 ### Agregar plugins
 
+Podemos completar la instalación agregando algunos plugins más que emplearemos en las siguientes secciones
+
 - En _Panel de Control_ -> _Administrar Jenkins_, Opción **Plugins**
 
 - En _Availabe plugins_, Buscar y seleccionar:
 
   - Kubernetes plugin
   - Azure Key Vault Plugin
+
+Reiniciamos Jenkins  activando el check de reinicio mostrado durante la instalación de los _plugins_
 
 ### Configurar Cloud y Pod Templates
 
@@ -276,28 +343,84 @@ Si pulsas sobre el número, #1 Veras la información de la construcción
 
 En el menu del la izquierda en **Console Output** tienes el registro del trabajo, se puede seguir mientras se ejecuta la tarea
 
-## Configurar tarea de ciclo de vida de una aplicación
+## Configurar tarea de ciclo de vida de una aplicación en Jenkins
 
-Requisito previos:
+### Requisito previos
 
-- Cuenta en GitHub
+Revisemos los requisito previos:
 
-- Realizar **Folk** en cuenta personal del repositorio [https://github.com/spring-projects/spring-petclinic](https://github.com/spring-projects/spring-petclinic)
+- Cuenta en GitHub [hrrps://github.com]
+
+- Realizar **Folk** en cuenta personal del repositorio [https://github.com/spring-projects/spring-petclinic](https://github.com/spring-projects/spring-petclinic), de momento déjalo como público
 
 - En Jenkins configurar el rate limit de GitHUb
   - En _Panel de Control_ -> _Administrar Jenkins, _System_ en GitHub API usage , establecer la opción _GitHub API usage rate limiting strategy_ a **Throttle at/near rate limit**. **Save** para guardar los cambios
 
-- Abrir el proyecto en **MS Code**
+- Abrir nuestro _Fork_ del repositorio `spring-petclinic` en **MS Code**
 
-- Teoría GIT
+  Copia la URL de tu proyecto en **GitHub** al portapapeles y pégala en una interprete de comandos añadiendo `git clone`
 
-- Crear Rama develop
+  **_¡Cuidado!_** no copies de aquí debes adaptar la **URL** a tu usuario de **GitHub**
+
+  ```Bash
+  git clone https://github.com/<Tu_usuario_GitHub>/bc-hybrid-cloud-4.git
+  cd bc-hybrid-cloud-4.git
+  code .
+  ```
+
+- En este punto hablemos sobre **Git**, conceptos básicos , algunos comandos y algunos flujos que se pueden adoptar
+
+- Sigamos creando la _rama_ `develop` a nuestro Fork de `spring-petclinic`
+
+  ```Bash
+  # Sacar rama local a partir de la actual
+  git checkout -b develop
+
+  # Sincronizar por primera vez la nueva rama local con remoto
+  git push --set-upstream origin develop
+
+  ```
 
 - Crear archivo Jenkinsfile en el directorio raíz del proyecto
 
-- Teoría Jenkins Pipeline
+  En Jenkins definimos el trabajo a realizar, **_Jenkins Pipeline _** en un archivo usualmente llamado `Jenkinsfile`
+  
+  Copia, de este repositorio, el archivo `Jenkinsfile.inicial` a tu repositorio `spring-petclinic` cambiando el nombre a `Jenkinsfile`. Recuerda estamos en rama `develop`
 
-Una vez cumplidos los requisitos previos Crearemos el proyecto, tarea, en Jenkins con el que realizaremos la prueba de concepto de una **Pipeline CI/CD**
+  ```Groovy
+  #!/usr/bin/env groovy
+  pipeline {
+      agent { label 'pod-default' }
+      stages {
+          stage('Check Environment') {
+              steps {
+                  sh 'java -version'
+                  container('maven') {
+                      sh '''
+                          java -version
+                          mvn -version
+                          pwd
+                      '''
+                  }
+              }
+          }
+      }
+  }
+  ```
+
+  Sube los cambios
+
+  ```Bash
+  git add Jenkinsfile
+  git commit -m "Add Jenkins Pipeline"
+  git push
+  ```
+
+- Veamos un poco de teoría sobre **Jenkins Pipeline** antes de continuar
+
+### Construcción de la Jenkins Pipeline - flujo CI/CD
+
+Una vez cumplidos con los requisitos previos vanos a crear el proyecto, tarea, en **Jenkins** con el que realizaremos la prueba de concepto de una **Pipeline CI/CD**
 
 - En _Panel de Control_ -> _+ Nueva Tarea_
   
