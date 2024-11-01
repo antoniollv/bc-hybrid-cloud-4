@@ -433,9 +433,58 @@ Una vez cumplidos con los requisitos previos vanos a crear el proyecto, tarea, e
 
 - **Save**
 
----
+Una vez la tarea esté agregada al **Jenkins** este procederá  a examinar el repositorio y agregará todas aquellas ramas donde encuentre un archivo `Jenkinsfile`. A continuación ejecutara la tarea definida el `Jenkinsfile`.
 
-Test unitarios
+Como en nuestro en nuestro repositorio en rama `develop` tenemos un `Jenkisfile` **Jenkins** proceder a ejecutar la tarea, la **_Jenkins Pipeline_**. Cada una de las ejecuciones es un trabajo, una construcción, _Build_, y van numeradas de forma secuencial
+
+Si todo va bien veremos el trabajo concluido correctamente indicado con un _check verde_
+
+Si examinamos el registro del trabajo, pulsando sobre el símbolo del _check verde_, veremos que este muestra las versión de **Java** instaladas en el contenedor `jnlp` (contenedor por defecto) y `maven`, en este último contenedor se muestra también la versión de **Maven** así como el directorio de trabajo (comando `pwd`).
+
+Por el contrario si se produce algún error este irá indicado con una _aspa rojo_, pudiendo revisar el registro de igual forma, pulsando sobre el símbolo.
+
+#### Agregar Stage de construcción
+
+Empecemos ha hacer cosas interesante, no solo mostrar información de los contenedores que conforman nuestro agente de construcción, ese **_Pod de Kubernetes_** que definimos mediante un plantilla al configurar el **Jenkins**
+
+Vamos a agregar una etapa de compilación a nuestro proyecto `spring-petclinic`.
+
+Para ello en **Code** añadimos el siguiente código a nuestro `Jenkinsfile` justo a continuación de la `stage('Check Environment')`
+
+```Groovy
+stage('Build') {
+    steps {
+        container('maven') {
+            println '01# Stage - Build'
+            println '(develop y main):  Build a jar file.'
+            sh './mvnw package -Dmaven.test.skip=true'
+        }
+    }
+}
+```
+
+Para asegurar que no se cometen errores al insertar el código, puedes sustituir el archivo `Jenkinsfile` actual copiando el archivo `Jenkinfile.build` de este repositorio. Reemplaza el archivo no te limites a copiarlo
+
+Una vez actualizado el archivo Jenkinsfile, subimos los cambios al repositorio.
+
+  ```Bash
+  git add Jenkinsfile
+  git commit -m "Add Stage Build"
+  git push
+  ```
+
+Y pulsamos sobre **_Construir ahora_** en la tarea Jenkins, podemos seguir la ejecución de la tarea en el registro pulsando sobre el símbolo de estado.
+
+Esta vez tardará considerablemente más en terminar, ya que el proceso descarga, mediante **Maven**, todas las dependencias que necesita para su construcción.
+
+Si al finalizar la tarea podemos leer en la ultima linea del registro **Finished: SUCCESS** es que todo ha ido bien
+
+Habremos conseguido dos cosas:
+
+- Hemos comprobado que nuestro proyecto compila
+- Tendremos un archivo **Jar** con el código empaquetado de la aplicación listo para desplegar
+
+#### Test unitarios
 
 Aseguremos que el plugin JUnit este instalado
 
