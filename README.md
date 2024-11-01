@@ -372,9 +372,80 @@ kubectl exec -it <nexus-pod-name> -- cat /nexus-data/admin.password
     - Allocate pseudo-TTY: true
   
 ---
-kubectl create deployment petclinic --image nexus-service:8082/repository/docker/spring-petclinic:latest
-kkubectl expose deployment petclinic --port 8080 --target-port 8888 --selector app=petclinic --type ClusterIP --name petclinic
 
+## Configuración para ejecutar kubectl en contenedor
+
+### Install kubectl binary with curl on Linux
+
+[https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/]
+
+Download the latest release with the command
+
+```Bash
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+```
+
+Download the kubectl checksum file
+
+```Bash
+ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+```
+
+Validate the kubectl binary against the checksum file
+
+```Bash
+ echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+```
+
+If valid, the output is:
+
+`kubectl: OK`
+
+If the check fails, sha256 exits with nonzero status and prints output similar to:
+
+```Txt
+kubectl: FAILED
+sha256sum: WARNING: 1 computed checksum did NOT match
+```
+
+Install kubectl
+
+```Bash
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+```
+
+Note:
+
+If you do not have root access on the target system, you can still install kubectl to the ~/.local/bin directory:
+
+```Bash
+chmod +x kubectl
+mkdir -p ~/.local/bin
+mv ./kubectl ~/.local/bin/kubectl
+# and then append (or prepend) ~/.local/bin to $PATH
+```
+
+Test to ensure the version you installed is up-to-date:
+
+```Bash
+kubectl version --client
+```
+
+### Instalación Jenkins Pipeline
+
+```Groovy
+sh '''
+  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+  chmod +x kubectl
+  mkdir -p ~/.local/bin
+  mv ./kubectl ~/.local/bin/kubectl
+  kubectl version --client
+  kubectl get all
+'''
+```
+
+kubectl create deployment petclinic --image 10.152.183.54:8082/repository/docker/spring-petclinic:latest
+kubectl expose deployment petclinic --port 8080 --target-port 8888 --selector app=petclinic --type ClusterIP --name petclinic
 ---
 
 ## Resolviendo problemas de resolución de DNS en MicroK8s
