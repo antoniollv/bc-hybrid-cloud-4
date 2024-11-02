@@ -2,11 +2,11 @@
 
 Para el seguimiento de esta tema  será necesario disponer de una cuenta personal en **Github**. Si no dispones aún de una puedes crearla gratuitamente en [https://github.com/]
 
-Añade a tu cuenta personal de **GitHub** un _Fork_ del repositorio [https://github.com/spring-projects/spring-petclinic] (público). Será nuestra aplicación de ejemplo para abordar los procesos _CI/CD_
+Añade a tu cuenta personal de **GitHub** un _Fork_ del repositorio [https://github.com/spring-projects/spring-petclinic] (en tu cuenta hazlo público). Será nuestra aplicación de ejemplo para abordar los procesos _CI/CD_
 
-También será necesario instalar un servidor **Jenkins**. El método que emplearemos será un _deployment_ en un nodo local de **Kubernetes** que use un _persistentVolumeClaim_ para la persistencia de datos, al cual se le definirá un _service_ de tipo _clusterIP_ para acceder a la consola de **Jenkins**. La instalación del servicio **Jenkins** se abordará al inicio del tema
+También será necesario un servidor **Jenkins**. Lo instalaremos al principio de este _tema_. El método que emplearemos será un _deployment_ en un nodo local de **Kubernetes** que use un _persistentVolumeClaim_ para la persistencia de datos, al cual se le definirá un _service_ de tipo _clusterIP_ para acceder a la consola de **Jenkins**
 
-Para la instalación del nodo local **Kubernetes** se recomienda instalar **Microk8s**. En **Ubuntu 24.04LTS**, nuestro S.O. de referencia, la instalación y comprobación del estado del nodo se realiza con unos pocos pasos
+Para la instalación del nodo local **Kubernetes** se recomienda instalar **Microk8s**. En **Ubuntu 24.04LTS**, nuestro S.O. de referencia. La instalación y comprobación del estado del nodo se realiza con unos pocos pasos
 
 Enlaces:
 
@@ -29,8 +29,8 @@ Enlaces:
   - [x] Construcción imagen de contenedor (Docker Build)
   - [x] Publicación de la imagen de contenedor (Docker Push)
   - [x] Despliegue de un contenedor de la aplicación (Kubernetes Deployment)
-  - [] Test de validación
-  - [] Promoción de entorno (Development -> Production)
+  - [ ] Tests de validación
+  - [ ] Promoción de entorno (Development -> Production)
 
 ## Configuración Ubuntu 24.04 LTS
 
@@ -131,7 +131,7 @@ git config --global http.sslverify false
 git config --global credential.helper store
 ```
 
-Clona este repositorio a tu equipo `git clone https://github.com/antoniollv/bc-hybrid-cloud-4.git`
+Clona el presente repositorio, el repositorio de refernecia del _tema_ a tu equipo `git clone https://github.com/antoniollv/bc-hybrid-cloud-4.git`, para tener a tu disposición el código que iremos usando
 
 Lanza MS Code en el directorio del repositorio
 
@@ -224,7 +224,7 @@ spec:
           claimName: jenkins-pvc
 ```
 
-Lo encontraras ya modificado en el repositorio
+Lo encontraras ya actualizado en el repositorio del _tema_
 
 Aplicamos el archivo y comprobamos que tanto el pod como el deployment están disponibles
 
@@ -418,7 +418,7 @@ Revisemos los requisito previos:
 
 - Veamos un poco de teoría sobre **Jenkins Pipeline** antes de continuar
 
-### Construcción de la Jenkins Pipeline - flujo CI/CD
+### Construcción de la Jenkins Pipeline - flujo CI/CD - Rama Develop
 
 Una vez cumplidos con los requisitos previos vanos a crear el proyecto, tarea, en **Jenkins** con el que realizaremos la prueba de concepto de una **Pipeline CI/CD**
 
@@ -458,6 +458,7 @@ stage('Build') {
             println '01# Stage - Build'
             println '(develop y main):  Build a jar file.'
             sh './mvnw package -Dmaven.test.skip=true'
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
     }
 }
@@ -547,12 +548,16 @@ stage('Unit Tests') {
 
 Si reemplaza el archivo `Jenkinsfile` por el archivo `Jenkisfile.unittest` de este repositorio y lo examinas, veras que se han añadido una condiciones de ejecución por ramas, para reducir los tiempos de ejecución de la _Pipeline_. Ya se desharán los cambios más adelante
 
+Una vez subidos los cambios al repositorio en **GitHub** lanza una nueva construcción en **Jenkins**
+
+Si la construcción es correcta, pulsa en el número de la construcción, veras los reportes de **JUnit**
+
 #### Despliegue de un servicio Nexus en MicroK8s
 
 Antes de abordar la siguiente etapa vamos a abordar el despliegue de un servicio **Nexus** en **MicroK8s**
 
-**Nexus** proporciona un repositorios de artefactos **Maven** y de imágenes de contenedor. Utilizaremos este servicio para publicar los artefactos generado en nuestra **_Pipeline
-_**
+**Nexus** proporciona un repositorios de artefactos **Maven** y de imágenes de contenedor. Utilizaremos este servicio para publicar los artefactos generado en nuestra **_Pipeline_**
+
 En los archivos **YAMLs** proporcionados ya se encuentra la definición de los servicio
 
 Crear deployment nexus
@@ -565,7 +570,7 @@ kubectl apply -f nexus-deployment.yaml
 Obtenemos la ip del servicio **Nexus**
 
 ```Bash
-kubectl get all
+kubectl get services | grep "nexus-service"
 ```
 
 Y accedemos al puerto http 8081
@@ -575,61 +580,191 @@ Url Nexus [http://IP_SERVICIO_NEXUS:80081]
 Obtener el Password del administrador
 
 ```BAsh
-kubectl get pods
+kubectl get pods | grep "nexus"
 kubectl exec -it <NEXUS_POD_NAME> -- cat /nexus-data/admin.password
 ```
 
 Una vez hemos accedido a la interfaz de **Nexus**. Debemos realizar las siguientes acciones
 
-- Establecer un nuevo password al usuario _admin_, no lo compliques mucho deberás recordarlo posteriormente de
-- Crear un repositorio para imágenes de contenedor tipo Docker
-- Configura la seguridadREAL
-- permitir acceso anonymouse
-- Configurar los repositoiros **Docker** y **Maven**
+- Completar el asistente de inicio de **Nexus**
+
+  Ve a la esquina superior izquierda y pulsa sobre _Sing in_, Introduce el usuario _admin_ y el password obtenido anteriormente
+
+  El asistente de cuatro pasos se iniciara, Botón _Next_
+
+  Establecer un nuevo password al usuario _admin_, no lo compliques mucho, deberás recordarlo, Botón _Next_
+
+  Selecciona _Enable anonymous access_, Botón _Next_ y Botón _Finish_
+
+  ![Nexus Sign in](https://github.com/antoniollv/bc-hybrid-cloud-4/imgs/nexus-sign_in.png "Nexus Sign in")
+
+- Añadir repositorio **docker**
+
+  En la barra superior selecciona la rueda dentada, en el menu vertical de la izquierda selecciona _Repository_ -> _Repositories_
+
+  Pulsa sobre el botón _+ Create repository_, selecciona _Recipe_ **_docker (hosted)_**
+
+  - Name: docker
+  - Activar, check - HTTP: 8082
+  - Activar, check - Allow anonymous docker pull ( Docker Bearer Token Realm required)
+
+  Resto de opciones en blanco o por omisión
+
+  Pulsar sobre el botón _Create repository_ al fina del formulario
+
+  ![Nexus Docker repository](https://github.com/antoniollv/bc-hybrid-cloud-4/imgs/nexus-docker_repository.png "Nexus Docker repository")
+
+- Activar identificación _Docker Bearer Token Realm_
+  
+  En la barra superior selecciona la rueda dentada, en el menu vertical de la izquierda selecciona _Security_ -> _Realms_
+
+  Desplazamos _Docker Bearer Token Realm_ de _Available_ a _Active_ y lo situamos en primera posición, Botón _Save_
+
+  ![Nexus Docker Realm](https://github.com/antoniollv/bc-hybrid-cloud-4/imgs/nexus-docker_realms.png "Nexus Docker Realm")
+
+- Asignar rol administrador (nx-admin) al usuario anonymous
+
+  En la barra superior selecciona la rueda dentada, en el menu vertical de la izquierda selecciona _Security_ -> _Users_
+
+  Pulsa sobre _anonymous_
+
+  En Roles deplazamos _nx-admin_ de _Available_ a _Granted_, Botón _Save_
+
+  ![Nexus User anonymous](https://github.com/antoniollv/bc-hybrid-cloud-4/imgs/nexus-user_anonymous.png "Nexus User anonymous")
 
 - En el nodo **MicroK8s** permitir repositorios de imágenes inseguros
 
-Cabe destacar que todas estas acciones van en contra de la buenas practicas en materia de seguridad, se realizan aquí de esta forma, en este momento con el fin de no añadir aun más complejidad al _tema_
+  En el siguiente enlace encontramos información de como establecer un registro de imágenes de contenedor local como _Insecure registry_ [https://microk8s.io/docs/registry-private] en **MicroK8s**
 
----
+  Necesitaremos la IP del servicio **Nexus** `kubectl get services | grep "nexus-service"`.
 
-export POSTGRES_PASSWORD="Pon aquí tu password"
-export POSTGRES_PASSWORD="HJR649-gd123@mj"
-kubectl get all
-kubectl exec -it <nombre-del-pod-de-postgresql> -- psql -U artifactory -d artifactorydb
-kubectl exec -it postgresql-5d558c74bb-h7tqg -- psql -U artifactory -d artifactorydb
+  Crear directorio y fichero `hosts.toml`
 
----
+  ```Bash
+  sudo mkdir -p /var/snap/microk8s/current/args/certs.d/<IP_SERVICIO_NEXUS>:8082
+  sudo touch /var/snap/microk8s/current/args/certs.d/<IP_SERVICIO_NEXUS>:8082/hosts.toml  
+  ```
 
-az ad sp create-for-rbac --name "azure-sp" \
-  --role "Key Vault Secrets User" \
-  --scopes "/subscriptions/dabd2ed3-f9cd-496c-b6e3-42d3e0a7e0a5/resourceGroups/bootcamp/providers/Microsoft.KeyVault/vaults/default01"
+  Editamos el archivo host.toml `sudo vi touch /var/snap/microk8s/current/args/certs.d/<IP_SERVICIO_NEXUS>:8082/hosts.toml`
 
----
-Ruta almacenamiento
-/var/snap/microk8s/common/default-storage
+  Con el siguiente contenido
 
----
+  ```Toml
+  # /var/snap/microk8s/current/args/certs.d/<IP_SERVICIO_NEXUS>:8082/hosts.toml
+  server = "<IP_SERVICIO_NEXUS>:8082"
+ 
+  [host."http://<IP_SERVICIO_NEXUS>:8082"]
+  capabilities = ["pull", "resolve"]
+  ```
 
-### Agregar Container Template Kaniko
+  Por último reiniciamos **MicroK8s**
+  
+  ```Bash
+  microk8s stop
+  microk8s start
+  ```
+
+> ¡Atención! Cabe destacar que estas acciones van en contra de la buenas practicas en materia de seguridad, se realizan aquí, de esta forma, en este momento, con el fin de no añadir aun más complejidad al _tema_
+
+#### Stages de publicación en repositorio de artefactos, Maven y Docker
+
+Una vez realizada la compilación y pasados los tests unitarios, y comprobado que disponemos de un servicio de repositorio de artefactos, el servicio **Nexus** que hemos montado y configurado en el apartado anterior. Procedemos a añadir a nuestro `Jenkinsfile` del proyecto `spring-petclinic` dos nuevas etapa de publicación de artefactos.
+
+`Publish Artifact`, en esta etapa publicaremos en **Nexus** el archivo **JAVA** `spring-petclinic-3.3.0-SNAPSHOT.jar` fruto de la primera etapa de construcción. Añadir la etapa a Jenkinsfile de `spring-petclinic`
+
+```Groovy
+stage('Publish Artifact') {
+    when {
+        branch 'main'
+        branch 'develop'
+    }
+    steps {
+        container('maven') {
+            println '04# Stage - Deploy Artifact'
+            println '(develop y main): Deploy artifact to repository.'
+            sh '''
+                mvn -e deploy:deploy-file \
+                    -Durl=http://nexus-service:8081/repository/maven-snapshots \
+                    -DgroupId=local.moradores \
+                    -DartifactId=spring-petclinic \
+                    -Dversion=3.3.0-SNAPSHOT \
+                    -Dpackaging=jar \
+                    -Dfile=target/spring-petclinic-3.3.0-SNAPSHOT.jar
+            '''
+        }
+    }
+}
+```
+
+`Build & Publish Container Image` en esta etapa no solo nos limitaremos a publicar la imagen de contenedor, también necesitamos construirla, para ello necesitaremos un archivo _Dockerfile_. Añádelo al repositorio `spring-petclinic`
+
+```Dockerfile
+FROM eclipse-temurin:17-jdk-alpine AS builder
+WORKDIR /app
+ARG JAR_FILE=spring-petclinic-3.3.0-SNAPSHOT.jar
+COPY target/${JAR_FILE} app.jar
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+EXPOSE 8080
+```
+
+También necesitaremos  un contenedor capaz de construir imágenes de contenedor. Un contenedor **Kaniko** puede construir y publicar imágenes. Hay que añadir una nueva definición de contenedor a nuestra plantilla
+
+Para agregar _Container Template Kaniko_
 
 - En _Panel de Control_ -> _Administrar Jenkins_ -> _kubernetes_ -> _Pod Templates_, **pod-default**
 
   - Add Container
     - Name: kaniko
-    - Docker image: gcr.io/kaniko-project/executor:latest
+    - Docker image: gcr.io/kaniko-project/executor:debug
     - Working directory: /home/jenkins/agent
     - Command to run: cat
     - Arguments to pass to the command: _En blanco_
     - Allocate pseudo-TTY: true
 
----
+Y añadimos la _stage_ al `Jenkinsfile`
 
-## Configuración para ejecutar kubectl en contenedor
+```Groovy
+stage('Build & Publish Container Image') {
+    when {
+        branch 'main'
+        branch 'develop'
+    }
+    steps {
+        container('kaniko') {
+            println '05# Stage - Build & Publish Container Image'
+            println '(develop y main): Build container image with Kaniko & Publish to container registry.'
+            input 'Please wait...'
+            sh '''
+                /kaniko/executor \
+                --context `pwd` \
+                --insecure \
+                --dockerfile Dockerfile \
+                --destination=nexus-service:8082/repository/docker/spring-petclinic:3.3.0-SNAPSHOT \
+                --destination=nexus-service:8082/repository/docker/spring-petclinic:latest \
+                --build-arg JAR_FILE=spring-petclinic-3.3.0-SNAPSHOT.jar
+            '''
+        }
+    }
+}
+```
 
-### Install kubectl binary with curl on Linux
+Una vez subidos los cambios al repositorio en **GitHub** lanza una nueva construcción en **Jenkins**
 
-[https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/]
+Si todo va como debe y accedes a los repositorios de **Nexus** observaras que los artefactos se encuentran ahí
+
+Hasta aquí el CI
+
+#### Stage de despliegue
+
+Continuamos con el CD. En esta _stage_ desplegaremos un contenedor en MicroK8s de la imagen de contenedor la aplicación `spring-petclinic` generada en el punto anterior. Por fin veremos la aplicación en funcionamiento
+
+Para lleva a cabo esta etapa necesitaremos tener instalada la utilidad de gestión kubectl en un contenedor.
+
+A continuación se describe el proceso de instalación de kubectl extraído de [https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/]
+
+> ¡Atención! NO REALIZAR ESTA INSTALACIÓN. Se realiza dentro de la _stage_ de despliegue en el contenedor por defecto `jnlp`
+
+##### Configuración para ejecutar kubectl en contenedor - Install kubectl binary with curl on Linux
 
 Download the latest release with the command
 
@@ -683,24 +818,47 @@ Test to ensure the version you installed is up-to-date:
 kubectl version --client
 ```
 
-### Instalación Jenkins Pipeline
-
-```Groovy
-sh '''
-  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-  chmod +x kubectl
-  mkdir -p ~/.local/bin
-  mv ./kubectl ~/.local/bin/kubectl
-  kubectl version --client
-  kubectl get all
-'''
-```
-
-kubectl create deployment petclinic --image 10.152.183.54:8082/repository/docker/spring-petclinic:latest
-kubectl expose deployment petclinic --port 8080 --target-port 8888 --selector app=petclinic --type ClusterIP --name petclinic
 ---
 
-## Resolviendo problemas de resolución de DNS en MicroK8s
+Con la instalación de kubectl nuestra stage queda del siguiente modo
+
+```Groovy
+stage('Deploy petclinic') {
+    when {
+        branch 'main'
+        branch 'develop'
+    }
+    steps {
+        println '06# Stage - Deploy petclinic'
+        println '(develop y main): Deploy petclinic app to MicroK8s.'
+        sh '''
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            chmod +x kubectl
+            mkdir -p ~/.local/bin
+            #mv ./kubectl ~/.local/bin/kubectl
+            
+            ./kubectl version --client
+            ./kubectl get all
+
+            ./kubectl create deployment petclinic --image sonar-service:8082/repository/docker/spring-petclinic:latest || \
+              echo 'Deplyment petclinic already exists, creating service...'
+            ./kubectl expose deployment petclinic --port 8080 --target-port 8888 --selector app=petclinic --type ClusterIP --name petclinic
+
+            ./kubectl get all
+        '''
+    }
+}
+```
+
+Añadirla al `Jenkinsfile` y subir al repositorio los cambios.
+
+Nueva construcción en **Jenkins**, esperamos a que finalice y examinamos el registro, por el final veremos la IP de acceso al servicio **_petclinic_**
+
+---
+
+## TIPs
+
+### Resolviendo problemas de resolución de DNS en MicroK8s
 
 La resolución DNS en MicroK8s se encarga de permitir que los servicios y pods dentro del clúster puedan resolverse mutuamente por nombre en lugar de direcciones IP.
 
@@ -745,3 +903,18 @@ Algunas posibles causas y soluciones si falla la resolución DNS
    ```Bash
    microk8s kubectl delete pod -n kube-system <nombre_del_pod_coredns>
    ```
+
+### Ruta almacenamiento, a los PVCs en MicroK8s
+
+`/var/snap/microk8s/common/default-storage`
+
+### Clausula post de un Jenkinsfile
+
+```Groovy
+post {
+        always {
+            archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+            junit 'build/reports/**/*.xml'
+        }
+    }
+```
