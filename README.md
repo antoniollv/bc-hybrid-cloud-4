@@ -530,8 +530,10 @@ Y añadimos una nueva etapa, `stage('Unit Tests')`
 ```Groovy
 stage('Unit Tests') {
     when {
-        branch 'main'
-        branch 'develop'
+        anyOf {
+            branch 'main'
+            branch 'develop'
+        }
     }
     steps {
         container('maven') {
@@ -546,7 +548,7 @@ stage('Unit Tests') {
 }
 ```
 
-Si reemplaza el archivo `Jenkinsfile` por el archivo `Jenkisfile.unittest` de este repositorio y lo examinas, veras que se han añadido una condiciones de ejecución por ramas, para reducir los tiempos de ejecución de la _Pipeline_. Ya se desharán los cambios más adelante
+Si reemplaza el archivo `Jenkinsfile` por el archivo `Jenkisfile.unittest` de este repositorio y lo examinas, veras que se han añadido un comentario a las condiciones de ejecución por ramas, para reducir los tiempos de ejecución de la _Pipeline_. Ya se desharán los cambios más adelante
 
 Una vez subidos los cambios al repositorio en **GitHub** lanza una nueva construcción en **Jenkins**
 
@@ -675,8 +677,10 @@ Una vez realizada la compilación y pasados los tests unitarios, y comprobado qu
 ```Groovy
 stage('Publish Artifact') {
     when {
-        branch 'main'
-        branch 'develop'
+        anyOf {
+            branch 'main'
+            branch 'develop'
+        }
     }
     steps {
         container('maven') {
@@ -726,8 +730,10 @@ Y añadimos la _stage_ al `Jenkinsfile`
 ```Groovy
 stage('Build & Publish Container Image') {
     when {
-        branch 'main'
-        branch 'develop'
+        anyOf {
+            branch 'main'
+            branch 'develop'
+        }
     }
     steps {
         container('kaniko') {
@@ -825,8 +831,10 @@ Con la instalación de kubectl nuestra stage queda del siguiente modo
 ```Groovy
 stage('Deploy petclinic') {
     when {
-        branch 'main'
-        branch 'develop'
+        anyOf {
+            branch 'main'
+            branch 'develop'
+        }
     }
     steps {
         println '06# Stage - Deploy petclinic'

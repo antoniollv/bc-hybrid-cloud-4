@@ -18,8 +18,10 @@ pipeline {
         }
         stage('Build') {
             when {
-                branch 'main'
-                //branch 'develop'
+                anyOf {
+                    branch 'main'
+                    //branch 'develop'
+                }
             }
             steps {
                 container('maven') {
@@ -31,8 +33,10 @@ pipeline {
         }
         stage('Unit Tests') {
             when {
-                branch 'main'
-                branch 'develop'
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
             }
             steps {
                 container('maven') {

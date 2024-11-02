@@ -18,8 +18,10 @@ pipeline {
         }
         stage('Build') {
             when {
-                branch 'main'
-                branch 'develop'
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
             }
             steps {
                 container('maven') {
@@ -31,8 +33,10 @@ pipeline {
         }
         stage('Unit Tests') {
             when {
-                branch 'main'
-                branch 'develop'
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
             }
             steps {
                 container('maven') {
@@ -47,8 +51,10 @@ pipeline {
         }
         stage('Publish Artifact') {
             when {
-                branch 'main'
-                branch 'develop'
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
             }
             steps {
                 container('maven') {
@@ -68,8 +74,10 @@ pipeline {
         }
         stage('Build & Publish Container Image') {
             when {
-                branch 'main'
-                branch 'develop'
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
             }
             steps {
                 container('kaniko') {
@@ -90,8 +98,10 @@ pipeline {
         }
         stage('Deploy petclinic') {
             when {
-                branch 'main'
-                branch 'develop'
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
             }
             steps {
                 println '06# Stage - Deploy petclinic'
