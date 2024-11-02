@@ -598,7 +598,7 @@ Una vez hemos accedido a la interfaz de **Nexus**. Debemos realizar las siguient
 
   Selecciona _Enable anonymous access_, Botón _Next_ y Botón _Finish_
 
-  ![Nexus Sign in](https://github.com/antoniollv/bc-hybrid-cloud-4/imgs/nexus-sign_in.png "Nexus Sign in")
+  ![Nexus Sign in](https://github.com/antoniollv/bc-hybrid-cloud-4/blob/main/imgs/nexus-sign_in.png "Nexus Sign in")
 
 - Añadir repositorio **docker**
 
@@ -614,7 +614,7 @@ Una vez hemos accedido a la interfaz de **Nexus**. Debemos realizar las siguient
 
   Pulsar sobre el botón _Create repository_ al fina del formulario
 
-  ![Nexus Docker repository](https://github.com/antoniollv/bc-hybrid-cloud-4/imgs/nexus-docker_repository.png "Nexus Docker repository")
+  ![Nexus Docker repository](https://github.com/antoniollv/bc-hybrid-cloud-4/blob/main/imgs/nexus-docker_repository.png "Nexus Docker repository")
 
 - Activar identificación _Docker Bearer Token Realm_
   
@@ -622,7 +622,7 @@ Una vez hemos accedido a la interfaz de **Nexus**. Debemos realizar las siguient
 
   Desplazamos _Docker Bearer Token Realm_ de _Available_ a _Active_ y lo situamos en primera posición, Botón _Save_
 
-  ![Nexus Docker Realm](https://github.com/antoniollv/bc-hybrid-cloud-4/imgs/nexus-docker_realms.png "Nexus Docker Realm")
+  ![Nexus Docker Realm](https://github.com/antoniollv/bc-hybrid-cloud-4/blob/main/imgs/nexus-docker_realms.png "Nexus Docker Realm")
 
 - Asignar rol administrador (nx-admin) al usuario anonymous
 
@@ -632,7 +632,7 @@ Una vez hemos accedido a la interfaz de **Nexus**. Debemos realizar las siguient
 
   En Roles deplazamos _nx-admin_ de _Available_ a _Granted_, Botón _Save_
 
-  ![Nexus User anonymous](https://github.com/antoniollv/bc-hybrid-cloud-4/imgs/nexus-user_anonymous.png "Nexus User anonymous")
+  ![Nexus User anonymous](https://github.com/antoniollv/bc-hybrid-cloud-4/blob/main/imgs/nexus-user_anonymous.png "Nexus User anonymous")
 
 - En el nodo **MicroK8s** permitir repositorios de imágenes inseguros
 
