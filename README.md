@@ -867,7 +867,9 @@ Realiza Nueva construcción en **Jenkins**, esperamos a que finalice y examinamo
 
 ---
 
-A continuación deberíamos realizar test usabilidad, de rendimiento, de carga, de interfaz de usuario... Nos conformaremos con comprobar que accedemos mediante navegador a la aplicación. Y pasaremos a promocionar el código a la rama de producción, a la rama `main`
+A continuación deberíamos realizar test de usabilidad, de rendimiento, de carga, de interfaz de usuario...
+
+Nos conformaremos con comprobar que accedemos mediante navegador a la aplicación. Y pasaremos a promocionar el código a la rama de producción, a la rama `main`
 
 ### Construcción de la Jenkins Pipeline - flujo CI/CD - Rama Main
 
