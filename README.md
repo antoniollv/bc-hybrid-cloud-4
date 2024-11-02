@@ -739,7 +739,6 @@ stage('Build & Publish Container Image') {
         container('kaniko') {
             println '05# Stage - Build & Publish Container Image'
             println '(develop y main): Build container image with Kaniko & Publish to container registry.'
-            input 'Please wait...'
             sh '''
                 /kaniko/executor \
                 --context `pwd` \
@@ -826,7 +825,7 @@ kubectl version --client
 
 ---
 
-Con la instalación de kubectl nuestra stage queda del siguiente modo
+Con la instalación de kubectl nuestra stage queda del siguiente modo.
 
 ```Groovy
 stage('Deploy petclinic') {
@@ -848,9 +847,9 @@ stage('Deploy petclinic') {
             ./kubectl version --client
             ./kubectl get all
 
-            ./kubectl create deployment petclinic --image sonar-service:8082/repository/docker/spring-petclinic:latest || \
+            ./kubectl create deployment petclinic --image <IP_SERVICIO_NEXUS>:8082/repository/docker/spring-petclinic:latest || \
               echo 'Deplyment petclinic already exists, creating service...'
-            ./kubectl expose deployment petclinic --port 8080 --target-port 8888 --selector app=petclinic --type ClusterIP --name petclinic
+            ./kubectl expose deployment petclinic --port 8080 --target-port 8080 --selector app=petclinic --type ClusterIP --name petclinic
 
             ./kubectl get all
         '''
@@ -858,9 +857,38 @@ stage('Deploy petclinic') {
 }
 ```
 
-Añadirla al `Jenkinsfile` y subir al repositorio los cambios.
+Añade la _stage_ cambiando `<IP_SERVICIO_NEXUS>` por la IP del servicio **Nexus**, al `Jenkinsfile` y sube al repositorio los cambios.
 
-Nueva construcción en **Jenkins**, esperamos a que finalice y examinamos el registro, por el final veremos la IP de acceso al servicio **_petclinic_**
+> ¡Atención! En este punto no bastara con copiar `Jenkinsfile.publish` y sustituir el archivo `Jenkinsfile` del repositorio del _tema_ al repositorio de la aplicación `spring-petclinic` deberás sustituir `<IP_SERVICIO_NEXUS>` por la IP del servicio **Nexus**. Más adelante ya realizaremos un automatismo para no tener que hacer esta sustitución a mano.
+
+En este punto es necesario resaltar que se debe usar le IP y no el nombre de servicio ya que la acción _pull_ de la imagen del contenedor se delega directamente en el **MicroK8s** y en el host que lo alberga y este no accede al servicio de resolución de nombres internos del nodo al que si acceden los PODs desplegados en el
+
+Realiza Nueva construcción en **Jenkins**, esperamos a que finalice y examinamos el registro, por el final veremos la IP de acceso al servicio **_petclinic_**
+
+---
+
+A continuación deberíamos realizar test usabilidad, de rendimiento, de carga, de interfaz de usuario... Nos conformaremos con comprobar que accedemos mediante navegador a la aplicación. Y pasaremos a promocionar el código a la rama de producción, a la rama `main`
+
+### Construcción de la Jenkins Pipeline - flujo CI/CD - Rama Main
+
+Aprovechando que vamos a incluir una nueva _stage_ de promoción de código, realizaremos una serie de cambios en nuestra **_Pipeline_**
+
+- _Token_ de acceso de **GitHub** para **Jenkins**
+
+  Como necesitaremos actualizar el repositorio desde el **Jenkins** será necesario obtener un token de acceso de GitHub
+
+- El token se almacenará en un KeyVault de Azure
+
+  Se deberá configurar el plugins
+
+- Uso de variables de entorno
+  
+  Se parametrizara mediante variables de entorno la _versión de software_, la rama, _entorno_, en la que se esté ejecutando la _Pipeline_, _La IP del servidor Nexus_
+
+- Pipeline Utility Steps Plugin
+  Lectura y escritura del archivo pom.xml
+
+- Publicación y Despliegue condicionales según el entorno
 
 ---
 

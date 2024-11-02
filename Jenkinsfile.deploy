@@ -83,7 +83,6 @@ pipeline {
                 container('kaniko') {
                     println '05# Stage - Build & Publish Container Image'
                     println '(develop y main): Build container image with Kaniko & Publish to container registry.'
-                    input 'Please wait...'
                     sh '''
                         /kaniko/executor \
                         --context `pwd` \
@@ -115,7 +114,7 @@ pipeline {
                     ./kubectl version --client
                     ./kubectl get all
 
-                    ./kubectl create deployment petclinic --image sonar-service:8082/repository/docker/spring-petclinic:latest || \
+                    ./kubectl create deployment petclinic --image <IP_SERVICIO_NEXUS>:8082/repository/docker/spring-petclinic:latest || \
                     echo 'Deplyment petclinic already exists, creating service...'
                     ./kubectl expose deployment petclinic --port 8080 --target-port 8888 --selector app=petclinic --type ClusterIP --name petclinic
 
