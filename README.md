@@ -848,7 +848,7 @@ stage('Deploy petclinic') {
             ./kubectl get all
 
             ./kubectl create deployment petclinic --image <IP_SERVICIO_NEXUS>:8082/repository/docker/spring-petclinic:latest || \
-              echo 'Deplyment petclinic already exists, creating service...'
+              echo 'Deployment petclinic already exists, creating service...'
             ./kubectl expose deployment petclinic --port 8080 --target-port 8080 --selector app=petclinic --type ClusterIP --name petclinic
 
             ./kubectl get all
@@ -880,6 +880,9 @@ Aprovechando que vamos a incluir una nueva _stage_ de promoción de código, rea
   Como necesitaremos actualizar el repositorio desde **Jenkins** será necesario obtener un _token_ de acceso al repositorio en **GitHub**
 
 - Añadir credenciales a la tarea _Spring Petclinic_
+
+- Configurar _Azure Plugin Key Vault_
+  Para usar el _token_ de **GitHub** en nuestra _Pipeline_
 
 - Añadir Stages de promoción de código
 
@@ -924,6 +927,49 @@ En _Branch Sources_, _GitHub_, _Credentials_, Botón _+Add_ _Jenkins_
 
 En _Credentials_ seleccionamos la credencial recién creada, Botón _Save_
 
+### Configuración del Azure Plugin Key Vault
+
+Para configurar el acceso a un _Key Vault_ en **Azure**, será necesario disponer de un _Service Principal_, con permiso para dicho acceso. Con el fin de acelerar, el proceso y no requerir una cuenta de **Azure**, se facilitará uno ya previamente creado
+
+Pasos seguidos en **Azure** (omitir durante el seguimiento del _tema_, ya realizados)
+
+- Creación del _Service principal_ mediante la _CLI de Azure_ con asignación de rol
+
+- Creación del _Key Vault_ y asignación de permisos de lectura al _Service Principal_
+  
+  ```Bash
+  az ad sp create-for-rbac --name "azure-sp" \
+  --role "Key Vault Secrets User" \
+  --scopes "/subscriptions/<AQUI EL Subscription ID>/resourceGroups/<AQUí el nombre del resourceGroups>/providers/Microsoft.KeyVault/vaults/<AQUÍ el nombre del Key Vault>"
+  ```
+
+- Adición de el/los _token_ de **GitHub** como _secretos_ al _Key Vault_
+  Se solicitarán los tokens de Github para ser incluidos en el _Key Vault_
+
+En **Jenkins**  realizar las siguientes pasos
+
+- _Panel de Control_ -> _Administrar Jenkins_ -> _System_, Sección _Azure Key Vault Plugin_
+
+  - Key Vault URL: Se facilitará
+  - Credential ID: Pulsar sobre _+ Add_ -> _Jenkins_
+    - Domain: Global credentials (unrestricted)
+    - Kind: Azure Service Principal
+    - Scope: Global(Jenkins, nodes, items, all child items, etc)
+    - Subscription ID: Se facilitará
+    - Client ID: Se facilitará
+    - Client Secret: Se facilitará
+    - Tenant ID: Se facilitará
+    - ID: azuresp
+    - Description: Azure Service Principal for Key Vault access
+    - Botón _Verify Service Principal_
+    Si todo está correcto
+    - Botón _Add_
+  - Credential ID: Pulsar sobre _none_ y seleccionar _azuresp (Azure Service Principal for Key Vault access)_
+  - Botón _Test Connection_
+  - Botón _Save_
+
+Si vamos a  _Panel de Control_ -> _Administrar Jenkins_ -> _Credentials_ Comprobaremos que se listan los identificadores de los secretos del _Key Vault_ en **Azure**
+
 #### Stages de promoción de código
 
 Nuestra promoción consistirá en quitar el sufijo `-SNAPSHOT` y promocionar a rama `main` en caso de encontrarnos en rama `develop`
@@ -935,6 +981,14 @@ Variable global
 
 ```Groovy
 CURRENT_VERSION = ""
+```
+
+Definir envar con el usuario de GitHub
+
+```Groovy
+environment {
+  GIT_USERNAME="<AQUÍ tu usuario de GitHub>"
+}
 ```
 
 Método
@@ -981,19 +1035,24 @@ En caso de encontrarnos en rama `develop` promocionamos a `main`
 ```Groovy
 stage('Release Promotion Branch main') {
     when {
-      branch 'develop'
+        branch 'develop'
     }
     steps {
-        script {
-                        
-            def releaseVersion = env.CURRENT_VERSION.replace("-SNAPSHOT", "")
-
-            sh "mvn versions:set -DnewVersion=${releaseVersion}"
-                        
-            sh 'git add pom.xml'
-            sh 'git commit -m "Release version ${releaseVersion}"'
-            sh 'git pull --rebase origin main'
-            sh 'git push origin main'
+        container('maven') {
+            println '07# Stage - Release Promotion Branch main'
+            println '(develop): Release Promotion Branch main update pom version'
+            withCredentials([string(credentialsId: 'github-token', variable: 'GIT_PASSWORD')]) {
+                script {
+                    def releaseVersion = CURRENT_VERSION.replace('-SNAPSHOT', '')
+                    def repoUrl = GIT_URL.replace('https://', "https://${GIT_USERNAME}:${GIT_PASSWORD}@")
+                    sh "mvn versions:set -DnewVersion=${releaseVersion}"
+                    sh 'git add pom.xml'
+                    sh "git commit -m 'Jenkins promotion ${releaseVersion}'"
+                    sh 'git checkout -b main || git checkout main'
+                    sh "git remote set-url origin ${repoUrl}"
+                    sh 'git push origin main'
+                }
+            }
         }
     }
 }
@@ -1004,20 +1063,25 @@ En caso de encontrarnos en rama `main` promocionamos a `develop`
 ```Groovy
 stage('Release Promotion Branch develop') {
     when {
-      branch 'main'
+        branch 'main'
     }
     steps {
-        script {
-         
-            def (major, minor, patch) = env.CURRENT_VERSION.split('\\.')
-            def newSnapshotVersion = "${major}.${minor}.${patch.toInteger() + 1}-SNAPSHOT"
-
-            sh "mvn versions:set -DnewVersion=${newSnapshotVersion}"
-            
-            sh 'git add pom.xml'
-            sh 'git commit -m "Bump version to ${newSnapshotVersion}"'
-            sh 'git checkout -b develop || git checkout develop'
-            sh 'git push origin develop'
+        container('maven') {
+            println '07# Stage - Release Promotion Branch develop'
+            println '(main): Release Promotion Branch develop update pom version'
+            withCredentials([string(credentialsId: 'github-token', variable: 'GIT_PASSWORD')]) {
+                script {
+                    def (major, minor, patch) = CURRENT_VERSION.split('\\.')
+                    def newSnapshotVersion = "${major}.${minor}.${patch.toInteger() + 1}-SNAPSHOT"
+                    def repoUrl = GIT_URL.replace('https://', "https://${GIT_USERNAME}:${GIT_PASSWORD}@")
+                    sh "mvn versions:set -DnewVersion=${newSnapshotVersion}"
+                    sh 'git add pom.xml'
+                    sh "git commit -m 'Jenkins promotion ${newSnapshotVersion}'"
+                    sh 'git checkout -b develop || git checkout develop'
+                    sh "git remote set-url origin ${repoUrl}"
+                    sh 'git push origin develop'
+                }
+            }
         }
     }
 }
@@ -1025,58 +1089,21 @@ stage('Release Promotion Branch develop') {
 
 También actualizaremos el resto de la _Pipeline_ para independizar la versión del código
 
-Otra mejora consiste obtener de forma dinámica la IP del servicio **Nexus** en el 
+Otra mejora consiste obtener de forma dinámica la IP del servicio **Nexus** en la _stage_ `Deploy petclinic`
 
 Todos estos cambios los tienes en el archivo `Jenkisfile.promotion`
 
 A estas alturas ya deberías saber que hacer para realizar una nueva construcción en **Jenkins** que refleje estos cambios
 
+Si todo va bien deberías poder descubrir la rama main en **Jenkins** y lanzar una construcción
+
+Al final podrá acceder a dos versiones de la aplicación una en el entorno de desarrollo y otra en el entorno de producción
+
+Examina los _services_ en **MicroK8s**
+
 ---
 
 ## TIPs
-
-### Configuración del Azure Plugin Key Vault
-
-Para configurar el acceso a un _Key Vault_ en **Azure**, será necesario disponer de un _Service Principal_, con permiso para dicho acceso. Con el fin de acelerar, el proceso y no requerir una cuenta de **Azure**, se facilitará uno ya previamente creado
-
-Pasos seguidos en **Azure** (omitir durante el seguimiento del _tema_, ya realizados)
-
-- Creación del _Service principal_ mediante la _CLI de Azure_ con asignación de rol
-
-- Creación del _Key Vault_ y asignación de permisos de lectura al _Service Principal_
-  
-  ```Bash
-  az ad sp create-for-rbac --name "azure-sp" \
-  --role "Key Vault Secrets User" \
-  --scopes "/subscriptions/<AQUI EL Subscription ID>/resourceGroups/<AQUí el nombre del resourceGroups>/providers/Microsoft.KeyVault/vaults/<AQUÍ el nombre del Key Vault>"
-  ```
-
-- Adición de el/los _token_ de **GitHub** como _secretos_ al _Key Vault_
-  Se solicitarán los tokens de Github para ser incluidos en el _Key Vault_
-
-En **Jenkins**  realizar las siguientes pasos
-
-- _Panel de Control_ -> _Administrar Jenkins_ -> _System_, Sección _Azure Key Vault Plugin_
-
-  - Key Vault URL: Se facilitará
-  - Credential ID: Pulsar sobre _+ Add_ -> _Jenkins_
-    - Domain: Global credentials (unrestricted)
-    - Kind: Azure Service Principal
-    - Scope: Global(Jenkins, nodes, items, all child items, etc)
-    - Subscription ID: Se facilitará
-    - Client ID: Se facilitará
-    - Client Secret: Se facilitará
-    - Tenant ID: Se facilitará
-    - ID: azuresp
-    - Description: Azure Service Principal for Key Vault access
-    - Botón _Verify Service Principal_
-    Si todo está correcto
-    - Botón _Add_
-  - Credential ID: Pulsar sobre _none_ y seleccionar _azuresp (Azure Service Principal for Key Vault access)_
-  - Botón _Test Connection_
-  - Botón _Save_
-
-Si vamos a  _Panel de Control_ -> _Administrar Jenkins_ -> _Credentials_ Comprobaremos que se listan los identificadores de los secretos del _Key Vault_ en **Azure**
 
 ### Resolviendo problemas de resolución de DNS en MicroK8s
 
