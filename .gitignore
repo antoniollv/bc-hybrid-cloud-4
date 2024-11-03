@@ -1,0 +1,6 @@
+### VS Code ###
+.vscode/
+
+### TMP files ###
+*.tmp
+TMP_*

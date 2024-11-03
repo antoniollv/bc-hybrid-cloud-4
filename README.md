@@ -1,4 +1,4 @@
-# CI/CD Jenkins - GithHub Actions
+# CI/CD con Jenkins
 
 Para el seguimiento de esta tema  será necesario disponer de una cuenta personal en **Github**. Si no dispones aún de una puedes crearla gratuitamente en [https://github.com/]
 
@@ -705,8 +705,8 @@ stage('Publish Artifact') {
 ```Dockerfile
 FROM eclipse-temurin:17-jdk-alpine AS builder
 WORKDIR /app
-ARG JAR_FILE=spring-petclinic-3.3.0-SNAPSHOT.jar
-COPY target/${JAR_FILE} app.jar
+ARG VERSION=3.3.0-SNAPSHOT.jar
+COPY target/spring-petclinic-$VERSION app.jar
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 EXPOSE 8080
 ```
@@ -746,7 +746,7 @@ stage('Build & Publish Container Image') {
                 --dockerfile Dockerfile \
                 --destination=nexus-service:8082/repository/docker/spring-petclinic:3.3.0-SNAPSHOT \
                 --destination=nexus-service:8082/repository/docker/spring-petclinic:latest \
-                --build-arg JAR_FILE=spring-petclinic-3.3.0-SNAPSHOT.jar
+                --build-arg VERSION=3.3.0-SNAPSHOT.jar
             '''
         }
     }
@@ -873,28 +873,210 @@ Nos conformaremos con comprobar que accedemos mediante navegador a la aplicació
 
 ### Construcción de la Jenkins Pipeline - flujo CI/CD - Rama Main
 
-Aprovechando que vamos a incluir una nueva _stage_ de promoción de código, realizaremos una serie de cambios en nuestra **_Pipeline_**
+Aprovechando que vamos a incluir una nueva _stage_ de promoción de código, realizaremos una serie de cambios en la configuración del **Jenkins** y en nuestra **_Pipeline_**
 
 - _Token_ de acceso de **GitHub** para **Jenkins**
 
-  Como necesitaremos actualizar el repositorio desde el **Jenkins** será necesario obtener un token de acceso de GitHub
+  Como necesitaremos actualizar el repositorio desde **Jenkins** será necesario obtener un _token_ de acceso al repositorio en **GitHub**
 
-- El token se almacenará en un KeyVault de Azure
+- Añadir credenciales a la tarea _Spring Petclinic_
 
-  Se deberá configurar el plugins
+- Añadir Stages de promoción de código
 
-- Uso de variables de entorno
+  - Uso de variables de entorno  
+    Se parametrizara mediante variables de entorno la _versión de software_
   
-  Se parametrizara mediante variables de entorno la _versión de software_, la rama, _entorno_, en la que se esté ejecutando la _Pipeline_, _La IP del servidor Nexus_
+  - Uso de métodos
+    Se añade un método para obtener la versión del archivo pom.xml
 
-- Pipeline Utility Steps Plugin
-  Lectura y escritura del archivo pom.xml
+#### Generar un Token Personal de Acceso (GitHub Token v2)
 
-- Publicación y Despliegue condicionales según el entorno
+- Ve a **GitHub**, pulsa en la esquina superior derecha sobre  tu _Avatar_ -> _Settings_
+
+  En el menú de la izquierda al final _Developer settings_ -> _Personal access tokens_ -> _Fine-grained tokens (Beta)_
+
+- Haz clic en _Generate new token_
+
+- _Repository access_ - _Only select repositories_ - Selecciona el repositorio `spring-petclinic`
+
+- En _Permissions_ - _Repository permissions_ - A todos los premiso(27) conceder Access: _Read and write_
+  _Administration_, _Codespaces metadata_ y _Metadata_ serán la excepción conceder _Access:Read-only_
+
+- Una vez creado, **copia el token**. No podrás volver obtener el token, en caso de perderlo necesitaras crear otro
+
+#### Añadir credenciales a la tarea Spring Petclinic
+
+Procedemos a añadir credenciales a la tarea _Spring Petclinic_ esto nos permitirá poder realizar cambios en el repositorio GitHub desde nuestra Pipeline
+
+ _Panel de Control_ -> _Spring Petclinic_ -> _Configure_
+
+En _Branch Sources_, _GitHub_, _Credentials_, Botón _+Add_ _Jenkins_
+
+- Domain: Global credentials (unrestricted)
+- Kind: Username with password
+- Scope: Global(Jenkins, nodes, items, all child items, etc)
+- Username: nuestro usuario de GitGub
+- Password: El token de GitHub
+- ID: githubcredential
+- Description: GitHub Credential
+- Botón _Validate_
+- Botón _Add_
+
+En _Credentials_ seleccionamos la credencial recién creada, Botón _Save_
+
+#### Stages de promoción de código
+
+Nuestra promoción consistirá en quitar el sufijo `-SNAPSHOT` y promocionar a rama `main` en caso de encontrarnos en rama `develop`
+Si estamos en rama `main` subimos en uno la versión añadimos el sufijo `-SNAPSHOT` y promocionamos a rama `develop`
+
+Añadiremos una variable global al inicio de la _Pipeline_ y un método al final, para obtener la versión del archivo `pom.xml`. Invocaremos el método desde nuestra _stage_ inicial `Check Environment`
+
+Variable global
+
+```Groovy
+CURRENT_VERSION = ""
+```
+
+Método
+
+```Groovy
+def currentVersion() {
+    def pomVersion = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+    return pomVersion
+}
+```
+
+Línea que se añade a la _stag_ `Check Environment`, ¡OJO! dentro de clausula _script_ dentro del contenedor `maven`. Ya que estamos, actualizamos la _stage_ añadiendo configuración para **GIT**
+
+```Groovy
+stage('Check Environment') {
+    steps {
+        container('maven') {
+            sh '''
+                java -version
+                mvn -version
+                pwd
+                env
+                git config --global --add safe.directory $PWD
+                git config --global --add user.email "jenkins@domain.local"
+                git config --global --add user.name "Jenkins Server"
+            '''
+
+            script {
+                CURRENT_VERSION = currentVersion()
+            }
+        }
+        println '01# Stage - Check Environment'
+        println '(develop y main):  Checking environment Java & Maven versions.'
+        sh 'java -version'
+        echo CURRENT_VERSION
+    }
+}
+```
+
+Y agregamos las dos stages de promoción
+
+En caso de encontrarnos en rama `develop` promocionamos a `main`
+
+```Groovy
+stage('Release Promotion Branch main') {
+    when {
+      branch 'develop'
+    }
+    steps {
+        script {
+                        
+            def releaseVersion = env.CURRENT_VERSION.replace("-SNAPSHOT", "")
+
+            sh "mvn versions:set -DnewVersion=${releaseVersion}"
+                        
+            sh 'git add pom.xml'
+            sh 'git commit -m "Release version ${releaseVersion}"'
+            sh 'git pull --rebase origin main'
+            sh 'git push origin main'
+        }
+    }
+}
+```
+
+En caso de encontrarnos en rama `main` promocionamos a `develop`
+
+```Groovy
+stage('Release Promotion Branch develop') {
+    when {
+      branch 'main'
+    }
+    steps {
+        script {
+         
+            def (major, minor, patch) = env.CURRENT_VERSION.split('\\.')
+            def newSnapshotVersion = "${major}.${minor}.${patch.toInteger() + 1}-SNAPSHOT"
+
+            sh "mvn versions:set -DnewVersion=${newSnapshotVersion}"
+            
+            sh 'git add pom.xml'
+            sh 'git commit -m "Bump version to ${newSnapshotVersion}"'
+            sh 'git checkout -b develop || git checkout develop'
+            sh 'git push origin develop'
+        }
+    }
+}
+```
+
+También actualizaremos el resto de la _Pipeline_ para independizar la versión del código
+
+Otra mejora consiste obtener de forma dinámica la IP del servicio **Nexus** en el 
+
+Todos estos cambios los tienes en el archivo `Jenkisfile.promotion`
+
+A estas alturas ya deberías saber que hacer para realizar una nueva construcción en **Jenkins** que refleje estos cambios
 
 ---
 
 ## TIPs
+
+### Configuración del Azure Plugin Key Vault
+
+Para configurar el acceso a un _Key Vault_ en **Azure**, será necesario disponer de un _Service Principal_, con permiso para dicho acceso. Con el fin de acelerar, el proceso y no requerir una cuenta de **Azure**, se facilitará uno ya previamente creado
+
+Pasos seguidos en **Azure** (omitir durante el seguimiento del _tema_, ya realizados)
+
+- Creación del _Service principal_ mediante la _CLI de Azure_ con asignación de rol
+
+- Creación del _Key Vault_ y asignación de permisos de lectura al _Service Principal_
+  
+  ```Bash
+  az ad sp create-for-rbac --name "azure-sp" \
+  --role "Key Vault Secrets User" \
+  --scopes "/subscriptions/<AQUI EL Subscription ID>/resourceGroups/<AQUí el nombre del resourceGroups>/providers/Microsoft.KeyVault/vaults/<AQUÍ el nombre del Key Vault>"
+  ```
+
+- Adición de el/los _token_ de **GitHub** como _secretos_ al _Key Vault_
+  Se solicitarán los tokens de Github para ser incluidos en el _Key Vault_
+
+En **Jenkins**  realizar las siguientes pasos
+
+- _Panel de Control_ -> _Administrar Jenkins_ -> _System_, Sección _Azure Key Vault Plugin_
+
+  - Key Vault URL: Se facilitará
+  - Credential ID: Pulsar sobre _+ Add_ -> _Jenkins_
+    - Domain: Global credentials (unrestricted)
+    - Kind: Azure Service Principal
+    - Scope: Global(Jenkins, nodes, items, all child items, etc)
+    - Subscription ID: Se facilitará
+    - Client ID: Se facilitará
+    - Client Secret: Se facilitará
+    - Tenant ID: Se facilitará
+    - ID: azuresp
+    - Description: Azure Service Principal for Key Vault access
+    - Botón _Verify Service Principal_
+    Si todo está correcto
+    - Botón _Add_
+  - Credential ID: Pulsar sobre _none_ y seleccionar _azuresp (Azure Service Principal for Key Vault access)_
+  - Botón _Test Connection_
+  - Botón _Save_
+
+Si vamos a  _Panel de Control_ -> _Administrar Jenkins_ -> _Credentials_ Comprobaremos que se listan los identificadores de los secretos del _Key Vault_ en **Azure**
 
 ### Resolviendo problemas de resolución de DNS en MicroK8s
 
