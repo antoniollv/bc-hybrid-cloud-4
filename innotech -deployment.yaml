@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: innotech-mlops-team-alfa
+  labels:
+    app: innotech-mlops-team-alfa-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: innotech-mlops-team-alfa-app
+  template:
+    metadata:
+      labels:
+        app: innotech-mlops-team-alfa-app
+    spec:
+      containers:
+        - name: ui-container
+          image: 006921246751.dkr.ecr.eu-north-1.amazonaws.com/mlops-innotech-ui:latest
+          ports:
+            - containerPort: 8080
+        - name: api-container
+          image: 006921246751.dkr.ecr.eu-north-1.amazonaws.com/mlops-innotech-api:latest
+          ports:
+            - containerPort: 50001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: innotech-mlops-team-alfa-service
+spec:
+  selector:
+    app: innotech-mlops-team-alfa-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+

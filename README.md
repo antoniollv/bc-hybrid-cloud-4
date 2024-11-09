@@ -1165,3 +1165,49 @@ post {
         }
     }
 ```
+user is not authorized to perform: iam:PassRole on resourcd: arn:aws:iam::***:role/service-role/my-test-lambda-role-xxxxxxxx with a explici deny in an identity-based policy
+
+---
+
+
+
+
+Secreto para docker registry
+
+kubectl create secret docker-registry ecr-secret \
+  --docker-server=006921246751.dkr.ecr.eu-north-1.amazonaws.com \
+  --docker-username=AWS \
+  --docker-password="$(aws ecr get-login-password)" \
+  --docker-email=antonio.lledo@convotis.com
+
+
+port-forward
+
+kubectl port-forward service/jenkins 8080:8080
+
+Log
+
+kubectl get events -n namespace
+
+
+
+microk8s config > ~/.kube/config
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: deployment-ingress
+  namespace: default # Namespace del deployment
+spec:
+  rules:
+  - host: "my-microk8s-srv"  # IP del nodo MicroK8s
+    http:
+      paths:
+      - path: /jenkins
+        pathType: Prefix
+        backend:
+          service:
+            name: jenkins # Nombre del servicio asociado al deployment
+            port:
+              number: 8080  # Puerto en el que está expuesto el servicio

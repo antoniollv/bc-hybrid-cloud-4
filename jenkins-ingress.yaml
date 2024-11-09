@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: deployment-ingress
+  namespace: default # Namespace del deployment
+spec:
+  rules:
+  - host: "my-microk8s-srv"  # IP del nodo MicroK8s
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jenkins # Nombre del servicio asociado al deployment
+            port:
+              number: 8080  # Puerto en el que está expuesto el servicio
