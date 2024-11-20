@@ -647,7 +647,7 @@ Una vez hemos accedido a la interfaz de **Nexus**. Debemos realizar las siguient
   sudo touch /var/snap/microk8s/current/args/certs.d/<IP_SERVICIO_NEXUS>:8082/hosts.toml  
   ```
 
-  Editamos el archivo host.toml `sudo vi touch /var/snap/microk8s/current/args/certs.d/<IP_SERVICIO_NEXUS>:8082/hosts.toml`
+  Editamos el archivo host.toml `sudo vi /var/snap/microk8s/current/args/certs.d/<IP_SERVICIO_NEXUS>:8082/hosts.toml`
 
   Con el siguiente contenido
 
