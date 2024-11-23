@@ -38,7 +38,7 @@ Configuración e instalación de las utilidades
 
 ### oh-my-bash
 
-`oh-my-bash`, es una extensión al **shell Bash**, resulta de utilidad disponer de esta extensión cuando _trasteamos_ con **Git**, `oh-my-zsh` si de prefiere el **shell Zsh**
+`oh-my-bash`, es una extensión al **shell Bash**, resulta de utilidad disponer de esta extensión cuando _trasteamos_ con **Git**, `oh-my-zsh` si se prefiere el **shell Zsh**
 
 Instalación
 
@@ -79,7 +79,7 @@ Es recomendable instalar las siguientes extensiones, que facilitan trabajar con 
 
 Podemos hacerlo pulsando la rueda dentada de la barra de menu de la izquierda y seleccionado _extensiones_ ( Crtl + Mayús + X ), y buscar las extensiones en el Marketplace
 
-### microk8s.ioc
+### microk8s.io
 
 Como el sistema operativo de los equipos facilitados para la realización del _tema_ ha sido **Ubuntu 24.04 LTS**, la plataforma **Kubernetes** elegida ha sido [MicroK8s](https://microk8s.io), por su simplificación a la hora de la instalación, versatilidad y cumplimiento de los estándares **Kubernetes**, en este S.O.
 
@@ -131,7 +131,7 @@ git config --global http.sslverify false
 git config --global credential.helper store
 ```
 
-Clona el presente repositorio, el repositorio de refernecia del _tema_ a tu equipo `git clone https://github.com/antoniollv/bc-hybrid-cloud-4.git`, para tener a tu disposición el código que iremos usando
+Clona el presente repositorio, el repositorio de referencia del _tema_, a tu equipo `git clone https://github.com/antoniollv/bc-hybrid-cloud-4.git`, para tener a tu disposición el código que iremos usando
 
 Lanza MS Code en el directorio del repositorio
 
@@ -152,7 +152,7 @@ EL primer paso es desplegar nuestra herramienta de automatización, **Jenkins**,
   
   Debe mostrar un pod `hostpath-provisioner` en el espacio de nombres `kube-system`, lo que indica que el complemento está activo
 
-  EN canso contrario activar con el comando `microk8s enable hostpath-storage`
+  En canso contrario activar con el comando `microk8s enable hostpath-storage`
 
 - Crear un PersistentVolumeClaim (PVC)
 
