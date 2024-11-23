@@ -220,10 +220,11 @@ Contenido:
          secretName: jenkins-tls
 ```
 
-2. Aplica la configuración:
-   ```bash
-   microk8s kubectl apply -f jenkins-ingress.yaml
-   ```
+Aplica la configuración:
+
+```bash
+   microk8s kubectl apply -f jenkins_helm-ingress.yaml
+```
 
 ---
 
@@ -232,7 +233,7 @@ Cert-Manager automatiza la solicitud y renovación del certificado HTTPS.
 
 1. Crea el archivo `letsencrypt-issuer.yaml`:
    ```bash
-   nano letsencrypt-issuer.yaml
+   vi letsencrypt-issuer.yaml
    ```
    Contenido:
    ```yaml
@@ -243,7 +244,7 @@ Cert-Manager automatiza la solicitud y renovación del certificado HTTPS.
    spec:
      acme:
        server: https://acme-v02.api.letsencrypt.org/directory
-       email: tuemail@dominio.com
+       email: alledova@gmail.com
        privateKeySecretRef:
          name: letsencrypt-prod
        solvers:
