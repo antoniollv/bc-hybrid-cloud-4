@@ -113,10 +113,10 @@ Comprobamos de nuevo que todo esté habilitado
 
 Creamos un `PersistentVolumeClaim` (**_PVC_**) pra nuestro **Jenkins**.Y aprovechamos para crea el `namespace` que lo contendrá
 
-- Archivo `jenkins-namespace-and-pvc.yaml`
+- Archivo `jenkins-namespace-pvc.yaml`
 
   ```bash
-    vi jenkins-namespace-and-pvc.yaml
+    vi jenkins-namespace-pvc.yaml
   ```
 
   Contenido
@@ -144,7 +144,7 @@ Creamos un `PersistentVolumeClaim` (**_PVC_**) pra nuestro **Jenkins**.Y aprovec
 - Aplicar el **_PVC_**
 
   ```bash
-    microk8s kubectl apply -f jenkins-pvc.yaml
+    microk8s kubectl apply -f jenkins-namespace-pvc.yaml
   ```
 
   - **apply -f**: Aplica la configuración desde un archivo
@@ -155,25 +155,27 @@ Creamos un `PersistentVolumeClaim` (**_PVC_**) pra nuestro **Jenkins**.Y aprovec
 
 ## Instalación de Jenkins con Helm
 
-Añadir el repositorio **_Helm_** de **Jenkins** , usaremos la versión integrada en **MicroK8s** de `helm` de `microk8s helm`
+Añadir el repositorio **_Helm_** de **Jenkins** , usaremos la versión integrada en **MicroK8s** de `helm` de `microk8s helm3`
 
 ```bash
-  helm repo add jenkins https://charts.jenkins.io
-  helm repo update
+  microk8s helm3 repo add jenkins https://charts.jenkins.io
+  microk8s helm3 repo update
 ```
 
-2. Instala Jenkins:
-   ```bash
-   helm install jenkins jenkins/jenkins \
-     --namespace jenkins --create-namespace \
-     --set controller.serviceType=ClusterIP \
-     --set controller.ingress.enabled=true \
-     --set controller.ingress.hostName=jenkins.almidom.es \
-     --set persistence.existingClaim=jenkins-pvc \
-     --set persistence.storageClass=manual \
-     --set persistence.size=8Gi
-   ```
-   - **install jenkins**: Nombre del release y del chart.
+- Instala Jenkins
+
+```bash
+microk8s helm3 install jenkins jenkins/jenkins \
+  --namespace jenkins \
+  --set controller.serviceType=ClusterIP \
+  --set controller.ingress.enabled=true \
+  --set controller.ingress.hostName=jenkins.moradores.es \
+  --set persistence.existingClaim=jenkins-pvc \
+  --set persistence.storageClass=manual \
+  --set persistence.size=8Gi
+```
+
+   - **install jenkins**: Nombre del release y del chart
    - **--namespace=jenkins**: Crea el espacio de nombres `jenkins`.
    - **--set**: Configura parámetros específicos:
      - **controller.serviceType=ClusterIP**: Expone el servicio internamente.
