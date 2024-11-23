@@ -111,17 +111,22 @@ Comprobamos de nuevo que todo esté habilitado
 
 ### Configurar el almacenamiento persistente
 
-Creamos un `PersistentVolumeClaim` (**_PVC_**) pra nuestro **Jenkins**
+Creamos un `PersistentVolumeClaim` (**_PVC_**) pra nuestro **Jenkins**.Y aprovechamos para crea el `namespace` que lo contendrá
 
-- Archivo `jenkins-pvc.yaml`
+- Archivo `jenkins-namespace-and-pvc.yaml`
 
   ```bash
-    vi jenkins-pvc.yaml
+    vi jenkins-namespace-and-pvc.yaml
   ```
 
   Contenido
 
   ```yaml
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: jenkins
+  ---
   apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
@@ -148,15 +153,14 @@ Creamos un `PersistentVolumeClaim` (**_PVC_**) pra nuestro **Jenkins**
 
   - **resources.requests.storage=8Gi**: Reserva 8GB de almacenamiento
 
+## Instalación de Jenkins con Helm
 
-### **5. Instalar Jenkins con Helm**
-Usamos Helm para desplegar Jenkins.
+Añadir el repositorio **_Helm_** de **Jenkins** , usaremos la versión integrada en **MicroK8s** de `helm` de `microk8s helm`
 
-1. Añade el repositorio de Helm:
-   ```bash
-   helm repo add jenkins https://charts.jenkins.io
-   helm repo update
-   ```
+```bash
+  helm repo add jenkins https://charts.jenkins.io
+  helm repo update
+```
 
 2. Instala Jenkins:
    ```bash
