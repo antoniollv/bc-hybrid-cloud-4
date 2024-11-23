@@ -143,9 +143,7 @@ Creamos un `PersistentVolumeClaim` (**_PVC_**) pra nuestro **Jenkins**.Y aprovec
 
 - Aplicar el **_PVC_**
 
-  ```bash
-    microk8s kubectl apply -f jenkins-namespace-pvc.yaml
-  ```
+  `microk8s kubectl apply -f jenkins-namespace-pvc.yaml`
 
   - **apply -f**: Aplica la configuración desde un archivo
 
@@ -164,36 +162,38 @@ Añadir el repositorio **_Helm_** de **Jenkins** , usaremos la versión integrad
 
 - Instala Jenkins
 
-```bash
-microk8s helm3 install jenkins jenkins/jenkins \
-  --namespace jenkins \
-  --set controller.serviceType=ClusterIP \
-  --set controller.ingress.enabled=true \
-  --set controller.ingress.hostName=jenkins.moradores.es \
-  --set persistence.existingClaim=jenkins-pvc \
-  --set persistence.storageClass=manual \
-  --set persistence.size=8Gi
-```
+  ```bash
+    microk8s helm3 install jenkins jenkins/jenkins \
+      --namespace jenkins \
+      --set controller.serviceType=ClusterIP \
+      --set controller.ingress.enabled=true \
+      --set controller.ingress.hostName=jenkins.moradores.es \
+      --set persistence.existingClaim=jenkins-pvc \
+      --set persistence.storageClass=manual \
+      --set persistence.size=8Gi
+  ```
 
-   - **install jenkins**: Nombre del release y del chart
-   - **--namespace=jenkins**: Crea el espacio de nombres `jenkins`.
-   - **--set**: Configura parámetros específicos:
-     - **controller.serviceType=ClusterIP**: Expone el servicio internamente.
-     - **controller.ingress.enabled=true**: Activa el uso de Ingress.
-     - **controller.ingress.hostName=jenkins.almidom.es**: Define el dominio.
-     - **persistence.existingClaim=jenkins-pvc**: Usa el volumen creado.
+  - **install jenkins**: Nombre del release y del chart
 
----
+  - **--set**: Configura parámetros específicos:
+    - **controller.serviceType=ClusterIP**: Expone el servicio internamente.
+    - **controller.ingress.enabled=true**: Activa el uso de Ingress.
+    - **controller.ingress.hostName=jenkins.moradores.es**: Define el dominio.
+    - **persistence.existingClaim=jenkins-pvc**: Usa el volumen creado.
 
-### **6. Configurar el Ingress**
+## Configurar el Ingress
+
 El Ingress gestiona el acceso externo y la solicitud del certificado HTTPS.
 
-1. Crea el archivo `jenkins-ingress.yaml`:
-   ```bash
-   nano jenkins-ingress.yaml
-   ```
-   Contenido:
-   ```yaml
+Crea el archivo `jenkins_helm-ingress.yaml`:
+
+```bash
+  vi jenkins_helm-ingress.yaml
+```
+
+Contenido:
+
+```yaml
    apiVersion: networking.k8s.io/v1
    kind: Ingress
    metadata:
@@ -204,7 +204,7 @@ El Ingress gestiona el acceso externo y la solicitud del certificado HTTPS.
        nginx.ingress.kubernetes.io/rewrite-target: /
    spec:
      rules:
-       - host: jenkins.almidom.es
+       - host: jenkins.moradores.es
          http:
            paths:
              - path: /
@@ -216,9 +216,9 @@ El Ingress gestiona el acceso externo y la solicitud del certificado HTTPS.
                      number: 8080
      tls:
        - hosts:
-           - jenkins.almidom.es
+           - jenkins.moradores.es
          secretName: jenkins-tls
-   ```
+```
 
 2. Aplica la configuración:
    ```bash
