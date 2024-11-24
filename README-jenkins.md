@@ -1,4 +1,4 @@
-# Jenkins Local
+# Jenkins Helm Local
 
 ## Introducción
 
@@ -228,45 +228,52 @@ Aplica la configuración:
 
 ---
 
-### **7. Configurar Cert-Manager**
+### Configurar Cert-Manager
+
 Cert-Manager automatiza la solicitud y renovación del certificado HTTPS.
 
-1. Crea el archivo `letsencrypt-issuer.yaml`:
-   ```bash
-   vi letsencrypt-issuer.yaml
-   ```
-   Contenido:
-   ```yaml
-   apiVersion: cert-manager.io/v1
-   kind: ClusterIssuer
-   metadata:
-     name: letsencrypt-prod
-   spec:
-     acme:
-       server: https://acme-v02.api.letsencrypt.org/directory
-       email: alledova@gmail.com
-       privateKeySecretRef:
-         name: letsencrypt-prod
-       solvers:
-         - http01:
-             ingress:
-               class: nginx
-   ```
+Crea el archivo `letsencrypt-issuer.yaml`
 
-2. Aplica la configuración:
-   ```bash
-   microk8s kubectl apply -f letsencrypt-issuer.yaml
-   ```
+```bash
+  vi letsencrypt-issuer.yaml
+```
+
+Contenido
+
+```yaml
+  apiVersion: cert-manager.io/v1
+  kind: ClusterIssuer
+  metadata:
+    name: letsencrypt-prod
+  spec:
+    acme:
+      server: https://acme-v02.api.letsencrypt.org/directory
+      email: alledova@gmail.com
+      privateKeySecretRef:
+        name: letsencrypt-prod
+      solvers:
+        - http01:
+            ingress:
+              class: nginx
+```
+
+Aplica la configuración:
+
+```bash
+  microk8s kubectl apply -f letsencrypt-issuer.yaml
+```
 
 ---
 
-### **8. Verificación**
-1. Comprueba los pods y recursos:
-   ```bash
-   microk8s kubectl get all -n jenkins
-   ```
+## Verificación
 
-2. Accede a Jenkins:
+Comprueba los pods y recursos
+
+```bash
+  microk8s kubectl get all -n jenkins
+```
+
+Accede a Jenkins:
    - URL: `https://jenkins.almidom.es`.
 
 3. Obtén la contraseña inicial:
@@ -276,3 +283,32 @@ Cert-Manager automatiza la solicitud y renovación del certificado HTTPS.
 
 Ahora tu Jenkins estará completamente configurado con HTTPS y almacenamiento persistente.
 
+---
+
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    # You must replace this email address with your own.
+    # Let's Encrypt will use this to contact you about expiring
+    # certificates, and issues related to your account.
+    email: me@example.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      # Secret resource that will be used to store the account's private key.
+      name: letsencrypt-account-key
+    # Add a single challenge solver, HTTP01 using nginx
+    solvers:
+    - http01:
+        ingress:
+          ingressClassName: nginx
+
+1. Get your 'admin' user password by running:
+  kubectl exec --namespace jenkins -it svc/jenkins -c jenkins -- /bin/cat /run/secrets/additional/chart-admin-password && echo
+2. Visit http://jenkins.moradores.es
+
+3. Login with the password from step 1 and the username: admin
+4. Configure security realm and authorization strategy
+5. Use Jenkins Configuration as Code by specifying configScripts in your values.yaml file, see documentation: http://jenkins.moradores.es/configuration-as-code and examples: https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos

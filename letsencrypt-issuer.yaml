@@ -1,14 +1,15 @@
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Issuer
 metadata:
-  name: letsencrypt-prod
+  name: letsencrypt
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
     email: alledova@gmail.com
     privateKeySecretRef:
-      name: letsencrypt-prod
+      name: letsencrypt-account-key
     solvers:
-      - http01:
-          ingress:
-            class: nginx
+    - http01:
+        ingress:
+          ingressClassName: nginx
+          
