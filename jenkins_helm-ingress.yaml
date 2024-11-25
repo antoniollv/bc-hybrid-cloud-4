@@ -4,21 +4,20 @@ metadata:
   name: jenkins-ingress
   namespace: jenkins
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/issuer: "letsencrypt"
 spec:
   rules:
-    - host: jenkins.moradores.es
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: jenkins
-                port:
-                  number: 8080
+  - host: jenkins.moradores.es
+    http:
+      paths:
+      - backend:
+          service:
+            name: jenkins
+            port:
+              number: 8080
+        path: /
+        pathType: Exact
   tls:
-    - hosts:
-        - jenkins.moradores.es
-      secretName: jenkins-tls
+  - hosts:
+    - jenkins.moradores.es
+    secretName: jenkins-tls
