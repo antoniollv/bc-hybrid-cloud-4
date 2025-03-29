@@ -1,0 +1,18 @@
+ingress:
+  enabled: true
+  hosts:
+    - host: gitea.moradores.es
+      paths:
+        - path: /
+          pathType: Prefix
+service:
+  http:
+    type: ClusterIP
+persistence:
+  enabled: true
+  create: false
+  claimName: gitea-pvc
+  size: 10Gi
+  storageClass: manual
+  accessMode: ReadWriteOnce
+
