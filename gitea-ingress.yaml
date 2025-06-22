@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: letsencrypt
+  name: gitea-ingress
+  namespace: gitea
+spec:
+  ingressClassName: public
+  rules:
+  - host: gitea.moradores.es
+    http:
+      paths:
+      - backend:
+          service:
+            name: gitea
+            port:
+              number: 3000
+        path: /
+        pathType: Exact
+  tls:
+  - hosts:
+    - gitea.moradores.es
+    secretName: gitea-tls
+

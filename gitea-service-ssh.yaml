@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: gitea
+    meta.helm.sh/release-namespace: gitea
+  labels:
+    app: gitea
+    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/version: 1.23.6
+  name: gitea-ssh2
+  namespace: gitea
+spec:
+  ipFamilies:
+  - IPv4
+  ports:
+  - name: ssh
+    port: 22
+    protocol: TCP
+    targetPort: 2222
+    nodePort: 30022
+  selector:
+    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/name: gitea
+  sessionAffinity: None
+  type: NodePort

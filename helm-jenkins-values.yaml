@@ -1,0 +1,10 @@
+USER-SUPPLIED VALUES:
+controller:
+  ingress:
+    enabled: true
+    hostName: jenkins.moradores.es
+  serviceType: ClusterIP
+persistence:
+  existingClaim: jenkins-pvc
+  size: 8Gi
+  storageClass: manual
