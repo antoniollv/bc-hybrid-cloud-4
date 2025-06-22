@@ -1,0 +1,1132 @@
+    1  2025-06-22 15:43:34 vi .ssh/authorized_keys
+    2  2025-06-22 15:43:34 sudo apt install vim curl git fonts-powerline
+    3  2025-06-22 15:43:34 vi .ssh/authorized_keys
+    4  2025-06-22 15:43:34 ls -l .ssh/authorized_keys
+    5  2025-06-22 15:43:34 exit
+    6  2024-11-20 06:24:10 vi ~/.bashrc
+    7  2025-06-22 15:43:34 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+    8  2025-06-22 15:43:34 exit
+    9  2024-11-20 07:35:19 git config --global user.name "Antonio Lledó Valero - Antoñete"
+   10  2024-11-20 07:36:49 git config --global user.email "alledova@gmail.com"
+   11  2024-11-20 07:38:07 git clone https://github.com/antoniollv/bc-hybrid-cloud-4.git
+   12  2024-11-20 07:38:58 kubectl get pods -n kube-system | grep 'hostpath-provisioner'
+   13  2024-11-20 07:39:09 sudo usermod -a -G microk8s tonete
+   14  2024-11-20 07:39:19 sudo chown -R tonete ~/.kube
+   15  2024-11-20 07:40:13 kubectl get pods -n kube-system | grep 'hostpath-provisioner'
+   16  2024-11-20 07:40:43 microk8s status --wait-ready
+   17  2024-11-20 07:41:20 microk8s enable hostpath-storage
+   18  2024-11-20 20:49:22 sudo power off
+   19  2024-11-20 20:49:27 sudo poweroff
+   20  2025-06-22 15:43:34 time
+   21  2025-06-22 15:43:34 dat
+   22  2025-06-22 15:43:34 date
+   23  2025-06-22 15:43:34 ls /etc/localtime
+   24  2025-06-22 15:43:34 cat /etc/localtime
+   25  2025-06-22 15:43:34 ls -la /etc/localtime 
+   26  2025-06-22 15:43:34 sudo rm /etc/localtime 
+   27  2025-06-22 15:43:34 ln -s /usr/share/zoneinfo/Europe/Madrid /etc/localtime
+   28  2025-06-22 15:43:34 sudo ln -s /usr/share/zoneinfo/Europe/Madrid /etc/localtime
+   29  2025-06-22 15:43:34 ls -la /etc/localtime 
+   30  2025-06-22 15:43:34 date
+   31  2024-11-22 08:31:50 sudo -i
+   32  2024-11-22 08:55:01 microk8s status
+   33  2024-11-22 08:56:13 microk8s enable ingress cert-manager
+   34  2024-11-23 19:23:27 microk8s status
+   35  2024-11-23 19:39:32 cd snap/
+   36  2024-11-23 19:39:34 ls -la
+   37  2024-11-23 19:39:37 cd
+   38  2024-11-23 19:39:40 ls -la
+   39  2024-11-23 20:05:47 microk8s kubectl apply -f jenkins-namespace-pvc.yaml
+   40  2024-11-23 20:07:12 microk8s kubectl apply -f jenkins-namespace-pvc.yaml
+   41  2024-11-23 20:07:53 microk8s kubectl apply -f jenkins-namespace-pvc.yaml
+   42  2024-11-23 20:08:12 microk8s helm3 repo add jenkins https://charts.jenkins.io
+   43  2024-11-23 20:08:24 microk8s helm3 repo update
+   44  2024-11-23 20:08:47 microk8s helm3 install jenkins jenkins/jenkins   --namespace jenkins   --set controller.serviceType=ClusterIP   --set controller.ingress.enabled=true   --set controller.ingress.hostName=jenkins.moradores.es   --set persistence.existingClaim=jenkins-pvc   --set persistence.storageClass=manual   --set persistence.size=8Gi
+   45  2024-11-23 20:17:21 microk8s kubectl apply -f jenkins_helm-ingress.yaml
+   46  2024-11-23 20:22:01 microk8s status
+   47  2024-11-23 20:22:22 microk8s kubectl get pods -n ingress
+   48  2024-11-23 20:22:36 microk8s kubectl apply --dry-run=client -f jenkins_helm-ingress.yaml
+   49  2024-11-23 20:25:29 microk8s kubectl explain ingress
+   50  2024-11-23 20:25:29 microk8s kubectl explain ingress.spec.rules.http.paths
+   51  2024-11-23 20:29:17 microk8s kubectl apply -f letsencrypt-issuer.yaml
+   52  2024-11-23 20:29:23 microk8s kubectl apply --dry-run=client -f jenkins_helm-ingress.yaml
+   53  2024-11-23 20:30:32 microk8s kubectl apply -f letsencrypt-issuer.yaml
+   54  2024-11-23 20:30:51 microk8s kubectl apply -f jenkins_helm-ingress.yaml
+   55  2024-11-23 23:27:59 microk8s kubectl get secrets -n jenkins
+   56  2024-11-23 23:28:37 microk8s kubectl logs -n cert-manager -l app.kubernetes.io/name=cert-manager
+   57  2024-11-23 23:29:38 microk8s kubectl get certificates -n jenkins
+   58  2024-11-23 23:30:26 vi jenkins_helm-ingress.yaml 
+   59  2024-11-23 23:35:39 microk8s kubectl describe certificate jenkins-tls -n jenkins
+   60  2024-11-23 23:38:33 microk8s kubectl delete certificate jenkins-tls -n jenkins
+   61  2024-11-23 23:38:42 microk8s kubectl apply -f jenkins_helm-ingress.yaml
+   62  2024-11-23 23:38:53 microk8s kubectl describe certificate jenkins-tls -n jenkins
+   63  2024-11-23 23:39:33 microk8s kubectl get certificates -n jenkins
+   64  2024-11-23 23:39:55 microk8s kubectl apply -f letsencrypt-issuer.yaml 
+   65  2024-11-23 23:40:02 microk8s kubectl apply -f jenkins_helm-ingress.yaml
+   66  2024-11-23 23:40:06 microk8s kubectl get certificates -n jenkins
+   67  2024-11-23 23:40:11 microk8s kubectl describe certificate jenkins-tls -n jenkins
+   68  2024-11-23 23:40:55 microk8s kubectl get secrets -n jenkins
+   69  2024-11-23 23:41:45 microk8s kubectl describe certificate jenkins-tls -n jenkins
+   70  2024-11-23 23:44:23 microk8s kubectl get secrets -n jenkins
+   71  2024-11-23 23:45:58 vi jenkins_helm-ingress.yaml 
+   72  2024-11-23 23:46:14 vi letsencrypt-issuer.yaml 
+   73  2024-11-23 23:48:22 microk8s kubectl apply -f letsencrypt-issuer.yaml 
+   74  2024-11-23 23:48:46 vi letsencrypt-issuer.yaml 
+   75  2024-11-23 23:52:22 microk8s kubectl describe certificate jenkins-tls -n jenkins
+   76  2024-11-23 23:53:03 microk8s kubectl logs -n cert-manager -l app.kubernetes.io/name=cert-manager
+   77  2024-11-23 23:57:54 microk8s kubectl describe certificate jenkins-tls -n jenkins
+   78  2024-11-23 23:58:10 microk8s kubectl get secrets -n jenkins
+   79  2024-11-23 23:58:41 microk8s kubectl delete certificate jenkins-tls -n jenkins
+   80  2024-11-23 23:58:46 microk8s kubectl get secrets -n jenkins
+   81  2024-11-23 23:58:50 microk8s kubectl describe certificate jenkins-tls -n jenkins
+   82  2024-11-24 00:00:00 vi letsencrypt-issuer.yaml
+   83  2024-11-24 00:00:54 kubectl delete -f letsencrypt-issuer.yaml
+   84  2024-11-24 00:01:01 vi letsencrypt-issuer.yaml
+   85  2024-11-24 00:01:20 kubectl apply -f letsencrypt-issuer.yaml
+   86  2024-11-24 00:01:34 microk8s kubectl describe certificate jenkins-tls -n jenkins
+   87  2024-11-24 00:02:04 microk8s kubectl get secrets -n jenkins
+   88  2024-11-24 00:02:17 microk8s kubectl get certificates -n jenkins
+   89  2024-11-24 00:02:39 microk8s kubectl get secrets -n jenkins
+   90  2024-11-24 00:02:51 kubectl apply -f letsencrypt-issuer.yaml
+   91  2024-11-24 00:02:57 microk8s kubectl get certificates -n jenkins
+   92  2024-11-24 00:03:11 microk8s kubectl get secrets -n jenkins
+   93  2024-11-24 00:03:19 microk8s kubectl describe certificate jenkins-tls -n jenkins
+   94  2024-11-24 00:03:43 microk8s kubectl get secrets -n jenkins
+   95  2024-11-24 00:03:50 microk8s kubectl logs -n cert-manager -l app.kubernetes.io/name=cert-manager
+   96  2024-11-24 00:04:44 microk8s kubectl get secrets -n jenkins
+   97  2024-11-24 00:04:47 microk8s kubectl get certificates -n jenkins
+   98  2024-11-24 00:05:07 microk8s kubectl logs -n cert-manager -l app.kubernetes.io/name=cert-manager
+   99  2024-11-24 00:05:18 microk8s kubectl get certificates -n jenkins
+  100  2024-11-24 00:05:28 microk8s kubectl get secrets -n jenkins
+  101  2024-11-24 00:05:36 microk8s kubectl logs -n cert-manager -l app.kubernetes.io/name=cert-manager
+  102  2024-11-24 00:05:52 vi letsencrypt-issuer.yaml
+  103  2024-11-24 00:06:27 vi jenkins_helm-ingress.yaml 
+  104  2024-11-24 00:07:00 kubectl delete -f jenkins_helm-ingress.yaml 
+  105  2024-11-24 00:07:15 kubectl apply -f jenkins_helm-ingress.yaml 
+  106  2024-11-24 00:07:23 microk8s kubectl logs -n cert-manager -l app.kubernetes.io/name=cert-manager
+  107  2024-11-24 00:08:05 kubectl apply -f jenkins_helm-ingress.yaml 
+  108  2024-11-24 00:08:18 kubectl apply -f letsencrypt-issuer.yaml
+  109  2024-11-24 00:08:29 kubectl delete -f letsencrypt-issuer.yaml
+  110  2024-11-24 00:08:32 kubectl apply -f letsencrypt-issuer.yaml
+  111  2024-11-24 00:08:38 microk8s kubectl logs -n cert-manager -l app.kubernetes.io/name=cert-manager
+  112  2024-11-24 00:09:12 microk8s kubectl describe certificate jenkins-tls -n jenkins
+  113  2024-11-24 00:09:58 microk8s kubectl get secrets -n jenkins
+  114  2024-11-24 00:10:09 microk8s kubectl logs -n cert-manager -l app.kubernetes.io/name=cert-manager
+  115  2024-11-24 00:10:38 microk8s kubectl describe certificate jenkins-tls -n jenkins
+  116  2024-11-24 00:10:49 microk8s kubectl get certificates -n jenkins
+  117  2024-11-24 00:11:45 microk8s kubectl describe certificate jenkins-tls -n jenkins
+  118  2024-11-24 00:13:42 kubectl get certificate -o wide
+  119  2024-11-24 00:13:48 kubectl get certificate -o wide -n jenkins
+  120  2024-11-24 00:16:19 kubectl get certificaterequest -n jenkins
+  121  2024-11-24 00:17:24 kubectl gets issuers -n jenkins
+  122  2024-11-24 00:17:30 kubectl get issuers -n jenkins
+  123  2024-11-24 00:17:49 kubectl describe issuer jenkins
+  124  2024-11-24 00:18:05 kubectl describe issuer letsencrypt-prod -n jenkins
+  125  2024-11-24 00:18:50 kubectl get certificaterequest -n jenkins
+  126  2024-11-24 00:19:12 kubectl describe jenkins-tls-1 -n jenkins
+  127  2024-11-24 00:19:29 kubectl describe certificaterequest jenkins-tls-1 -n jenkins
+  128  2024-11-24 00:20:53 kubectl delete -f letsencrypt-issuer.yaml
+  129  2024-11-24 00:21:06 vi letsencrypt-issuer.yaml 
+  130  2024-11-24 00:23:26 kubectl apply -f letsencrypt-issuer.yaml
+  131  2024-11-24 00:23:34 kubectl describe certificaterequest jenkins-tls-1 -n jenkins
+  132  2024-11-24 00:28:47 kubectl get challenges -n cert-manager -o wide
+  133  2024-11-24 00:28:57 kubectl get challenges -n jenkins -o wide
+  134  2024-11-24 00:33:13 kubectl describe certificaterequest jenkins-tls-1 -n jenkins
+  135  2024-11-24 00:33:28 kubectl describe jenkins-tls-1 -n jenkins
+  136  2024-11-24 00:33:41 kubectl describe certificaterequest jenkins-tls-1 -n jenkins
+  137  2024-11-24 00:33:52 kubectl get certificate -o wide -n jenkins
+  138  2024-11-24 00:34:09 kubectl describe certificaterequest jenkins-tls-1 -n jenkins
+  139  2024-11-24 00:34:16 kubectl get challenges -n jenkins -o wide
+  140  2024-11-24 00:38:12 kubectl logs -n cert-manager deploy/cert-manage
+  141  2024-11-24 00:38:22 kubectl logs -n cert-manager deploy/cert-manager
+  142  2024-11-24 00:40:08 kubectl get ingress -n jenkins cm-acme-http-solver-4f9ls -o yaml
+  143  2024-11-24 00:41:32 kubectl describe challenge -n jenkins jenkins-tls-1-2921023296-3786633572
+  144  2024-11-24 00:44:48 microk8s stop
+  145  2024-11-24 00:45:10 microk8s start
+  146  2024-11-24 00:45:35 microk8s status --wait-ready
+  147  2024-11-24 00:46:10 microk8s stop
+  148  2024-11-24 00:46:17 sudo poweroff
+  149  2024-11-24 11:16:05 microk8s status
+  150  2024-11-24 11:16:12 microk8s start
+  151  2024-11-24 11:17:23 kubectl get pods --all-namespaces
+  152  2024-11-24 11:29:39 ping jenkins.moradores.es
+  153  2024-11-24 11:30:35 sudo apt-get install -y iputils-ping
+  154  2024-11-24 11:30:40 ping jenkins.moradores.es
+  155  2024-11-24 11:32:22 kubectl run curl-test --image=curlimages/curl:latest --restart=Never --command -- sleep 3600
+  156  2024-11-24 11:32:33 kubectl exec curl-test -- curl -v https://acme-v02.api.letsencrypt.org/directory
+  157  2024-11-24 11:33:21 vi letsencrypt-issuer.yaml 
+  158  2024-11-24 11:34:41 kubectl apply -f letsencrypt-issuer.yaml 
+  159  2024-11-24 11:35:20 kubectl logs -n cert-manager deploy/cert-manager
+  160  2024-11-24 11:36:16 kubectl get ingress -A
+  161  2024-11-24 11:38:05 kubectl delete ingress jenkins
+  162  2024-11-24 11:38:12 kubectl delete ingress jenkins -n jenkins
+  163  2024-11-24 11:38:17 kubectl get ingress -A
+  164  2024-11-24 11:40:41 kubectl get ingress -n jenkins cm-acme-http-solver-4f9ls -o yaml
+  165  2024-11-24 11:41:48 kubectl describe challenge -n jenkins jenkins-tls-1-2921023296-3786633572
+  166  2024-11-24 11:42:35 kubectl delete challenge -n jenkins jenkins-tls-1-2921023296-3786633572
+  167  2024-11-24 11:43:07 kubectl get challenges -n jenkins
+  168  2024-11-24 11:43:26 kubectl describe challenge -n jenkins jenkins-tls-1-2921023296-3786633572
+  169  2024-11-24 11:46:21 kubectl get challenges -n jenkins
+  170  2024-11-24 11:46:45 kubectl describe challenge -n jenkins jenkins-tls-1-2921023296-3786633572
+  171  2024-11-24 11:48:58 kubectl logs -n cert-manager deploy/cert-manager
+  172  2024-11-24 11:50:19 kubectl logs -n cert-manager deploy/cert-manager | grep "jenkins.moradores.es"
+  173  2024-11-24 11:52:12 vi letsencrypt-issuer.yaml 
+  174  2024-11-24 11:53:19 kubectl apply -f letsencrypt-issuer.yaml 
+  175  2024-11-24 11:53:30 kubectl logs -n cert-manager deploy/cert-manager
+  176  2024-11-24 11:54:42 vi letsencrypt-issuer.yaml 
+  177  2024-11-24 11:54:58 kubectl apply -f letsencrypt-issuer.yaml 
+  178  2024-11-24 11:55:01 kubectl logs -n cert-manager deploy/cert-manager
+  179  2024-11-24 11:55:12 vi letsencrypt-issuer.yaml 
+  180  2024-11-24 11:55:34 kubectl apply -f letsencrypt-issuer.yaml 
+  181  2024-11-24 11:55:38 kubectl logs -n cert-manager deploy/cert-manager
+  182  2024-11-24 11:55:54 vi letsencrypt-issuer.yaml 
+  183  2024-11-24 11:56:23 kubectl apply -f letsencrypt-issuer.yaml 
+  184  2024-11-24 11:56:26 kubectl logs -n cert-manager deploy/cert-manager
+  185  2024-11-24 12:01:11 microk8s reset
+  186  2024-11-24 12:01:17 sudo microk8s reset
+  187  2024-11-24 13:29:42 microk8s status --wait-ready
+  188  2024-11-24 13:30:01 microk8s enable hostpath-storage
+  189  2024-11-24 13:30:13 microk8s enable dns
+  190  2024-11-24 13:30:37 microk8s enable ingress
+  191  2024-11-24 13:40:55 microk8s status --wait-ready
+  192  2024-11-24 13:42:19 cat jenkins-namespace-pvc.yaml 
+  193  2024-11-24 13:43:10 microk8s kubectl apply -f jenkins-namespace-pvc.yaml
+  194  2024-11-24 13:43:27 microk8s helm3 repo add jenkins https://charts.jenkins.io
+  195  2024-11-24 13:43:49 microk8s helm3 repo update
+  196  2024-11-24 13:45:54 vi  jenkins_helm-ingress.yaml 
+  197  2024-11-24 13:47:29 kubectl apply -f letsencrypt-issuer.yaml
+  198  2024-11-24 13:49:22 microk8s enable cert-manager
+  199  2024-11-24 13:51:02 kubectl delete -f letsencrypt-issuer.yaml
+  200  2024-11-24 13:53:26 kubectl delete -f jenkins_helm-ingress.yaml
+  201  2024-11-24 13:53:33 vi jenkins_helm-ingress.yaml 
+  202  2024-11-24 13:56:46 kubectl apply -f jenkins_helm-ingress.yaml
+  203  2024-11-24 13:57:12 vi letsencrypt-issuer.yaml
+  204  2024-11-24 13:58:10 kubectl apply -f letsencrypt-issuer.yaml
+  205  2024-11-24 13:58:43 vi letsencrypt-issuer.yaml
+  206  2024-11-24 13:58:59 kubectl apply -f letsencrypt-issuer.yaml
+  207  2024-11-24 13:59:31 microk8s helm3 install jenkins jenkins/jenkins       --namespace jenkins       --set controller.serviceType=ClusterIP       --set controller.ingress.enabled=true       --set controller.ingress.hostName=jenkins.moradores.es       --set persistence.existingClaim=jenkins-pvc       --set persistence.storageClass=manual       --set persistence.size=8Gi
+  208  2024-11-24 14:02:27 microk8s helm3 install jenkins jenkins/jenkins       --namespace jenkins       --set controller.serviceType=ClusterIP       --set controller.ingress.enabled=false       --set controller.ingress.hostName=jenkins.moradores.es       --set persistence.existingClaim=jenkins-pvc       --set persistence.storageClass=manual       --set persistence.size=8Gi
+  209  2024-11-24 14:04:48 kubectl logs -n cert-manager deploy/cert-manager
+  210  2024-11-24 14:06:39 vi letsencrypt-issuer.yaml 
+  211  2024-11-24 14:07:32 kubectl delete -f letsencrypt-issuer.yaml
+  212  2024-11-24 14:07:35 vi letsencrypt-issuer.yaml 
+  213  2024-11-24 14:07:54 kubectl apply -f letsencrypt-issuer.yaml
+  214  2024-11-24 14:08:02 kubectl logs -n cert-manager deploy/cert-manager
+  215  2024-11-24 14:10:43 kubectl get pods --namespace cert-manager
+  216  2024-11-24 14:12:08 vi letsencrypt-issuer.yaml 
+  217  2024-11-24 14:16:02 vi jenkins_helm-ingress.yaml 
+  218  2024-11-24 14:21:29 kubectl get ingressclasses
+  219  2024-11-24 14:22:28 vi jenkins_helm-ingress.yaml 
+  220  2024-11-24 14:28:22 kubectl delete -f letsencrypt-issuer.yaml
+  221  2024-11-24 14:28:44 kubectl delete -f jenkins_helm-ingress.yaml
+  222  2024-11-24 14:28:58 vi jenkins_helm-ingress.yaml 
+  223  2024-11-24 14:29:30 vi letsencrypt-issuer.yaml 
+  224  2024-11-24 14:31:47 kubectl apply -f letsencrypt-issuer.yaml 
+  225  2024-11-24 14:32:19 kubectl apply -f jenkins_helm-ingress.yaml 
+  226  2024-11-24 14:32:46 vi jenkins_helm-ingress.yaml 
+  227  2024-11-24 14:35:43 kubectl apply -f jenkins_helm-ingress.yaml 
+  228  2024-11-24 14:36:27 vi jenkins_helm-ingress.yaml 
+  229  2024-11-24 14:37:21 kubectl apply -f jenkins_helm-ingress.yaml 
+  230  2024-11-24 14:37:54 vi jenkins_helm-ingress.yaml 
+  231  2024-11-24 14:39:11 kubectl apply -f jenkins_helm-ingress.yaml 
+  232  2024-11-24 14:39:19 vi jenkins_helm-ingress.yaml 
+  233  2024-11-24 14:40:09 kubectl apply -f jenkins_helm-ingress.yaml 
+  234  2024-11-24 14:40:12 vi jenkins_helm-ingress.yaml 
+  235  2024-11-24 14:40:54 kubectl apply -f jenkins_helm-ingress.yaml 
+  236  2024-11-24 14:41:06 kubectl apply -f letsencrypt-issuer.yaml 
+  237  2024-11-24 14:42:07 kubectl logs -n cert-manager deploy/cert-manager
+  238  2024-11-24 16:10:30 kubectl get challenges
+  239  2024-11-24 16:10:37 kubectl get challenges -n jenkins
+  240  2024-11-24 16:11:12 kubectl get certificaterequests -n
+  241  2024-11-24 16:11:18 kubectl get certificaterequests -n jenkins
+  242  2024-11-24 16:12:00 kubectl get certificates -n jenkins
+  243  2024-11-24 16:12:41 kubectl get clusterissuers
+  244  2024-11-24 16:13:19 kubectl describe ingress -n jenkins
+  245  2024-11-24 16:28:35 vi  jenkins_helm-ingress.yaml 
+  246  2024-11-24 16:30:00 kubectl apply -f jenkins_helm-ingress.yaml 
+  247  2024-11-24 16:31:28 vi  jenkins_helm-ingress.yaml 
+  248  2024-11-24 16:32:00 kubectl apply -f jenkins_helm-ingress.yaml 
+  249  2024-11-24 16:32:25 vi  jenkins_helm-ingress.yaml 
+  250  2024-11-24 16:33:28 kubectl apply -f jenkins_helm-ingress.yaml 
+  251  2024-11-24 16:36:49 vi  jenkins_helm-ingress.yaml 
+  252  2024-11-24 16:37:06 kubectl apply -f jenkins_helm-ingress.yaml 
+  253  2024-11-24 16:37:26 vi  jenkins_helm-ingress.yaml 
+  254  2024-11-24 16:38:05 kubectl apply -f jenkins_helm-ingress.yaml 
+  255  2024-11-24 16:42:43 kubectl edit ingress cm-acme-http-solver-xxxxx -n jenkins
+  256  2024-11-24 16:43:19 kubectl get ingress -n jenkins
+  257  2024-11-24 16:43:46 kubectl edit cm-acme-http-solver-s2kq2 -n jenkins
+  258  2024-11-24 16:43:56 kubectl edit ingress cm-acme-http-solver-s2kq2 -n jenkins
+  259  2024-11-24 16:46:27 vi jenkins_helm-ingress.yaml 
+  260  2024-11-24 16:48:12 kubectl apply -f jenkins_helm-ingress.yaml 
+  261  2024-11-24 16:49:50 kubectl get ingress
+  262  2024-11-24 16:49:59 kubectl get ingress -n jenkins
+  263  2024-11-24 16:51:26 kubectl delete ingress jenkins-ingress
+  264  2024-11-24 16:51:33 kubectl delete ingress jenkins-ingress -n jenkins
+  265  2024-11-24 16:52:02 kubectl get ingress -n jenkins
+  266  2024-11-24 16:52:21 vi jenkins_helm-ingress.yaml 
+  267  2024-11-24 16:53:56 kubectl get ingress -n jenkins
+  268  2024-11-24 16:54:08 kubectl get ingress --all-namespaces
+  269  2024-11-24 16:55:14 kubectl get configmap -n ingress
+  270  2024-11-24 16:55:40 kubectl describe configmap nginx-ingress-microk8s-conf -n ingress
+  271  2024-11-24 16:56:08 kubectl describe configmap nginx-ingress-tcp-microk8s-conf -n ingress
+  272  2024-11-24 16:56:39 kubectl edit configmap nginx-ingress-tcp-microk8s-conf -n ingress
+  273  2024-11-24 16:57:54 kubectl delete pod -n ingress -l name=nginx-ingress-microk8s
+  274  2024-11-24 16:58:25 vi jenkins_helm-ingress.yaml 
+  275  2024-11-24 16:58:54 kubectl apply  -f jenkins_helm-ingress.yaml 
+  276  2024-11-24 16:59:00 kubectl get configmap -n ingress
+  277  2024-11-24 16:59:06 kubectl get ingress --all-namespaces
+  278  2024-11-24 16:59:59 vi  jenkins_helm-ingress.yaml 
+  279  2024-11-24 19:10:30 sudo microk8s reset
+  280  2024-11-24 19:14:56 sudo microk8s start
+  281  2024-11-24 19:15:17 microk8s status --wait-ready
+  282  2024-11-24 19:15:54 microk8s enable dns
+  283  2024-11-24 19:16:07 microk8s enable hostpath-storage
+  284  2024-11-24 19:16:51 microk8s enable cert-manager
+  285  2024-11-24 19:18:40 microk8s enable ingress
+  286  2024-11-24 19:19:14 kubectl apply -f jenkins-namespace-pvc.yaml
+  287  2024-11-24 19:19:24 microk8s helm3 repo add jenkins https://charts.jenkins.io
+  288  2024-11-24 19:19:40 microk8s helm3 repo update
+  289  2024-11-24 19:20:07 microk8s helm3 install jenkins jenkins/jenkins       --namespace jenkins       --set controller.serviceType=ClusterIP       --set controller.ingress.enabled=true       --set controller.ingress.hostName=jenkins.moradores.es       --set persistence.existingClaim=jenkins-pvc       --set persistence.storageClass=manual       --set persistence.size=8Gi
+  290  2024-11-24 19:20:56 vi jenkins_helm-ingress.yaml
+  291  2024-11-24 19:29:28 git reset .
+  292  2024-11-24 19:31:31 git restore .
+  293  2024-11-24 19:31:45 kubectl -f letsencrypt-issuer.yaml 
+  294  2024-11-24 19:31:54 kubectl apply -f letsencrypt-issuer.yaml 
+  295  2024-11-24 19:32:09 kubectl get clusterissuer -o wide
+  296  2024-11-24 19:32:24 kubectl get clusterissuer -o wide -all-namespaces
+  297  2024-11-24 19:32:33 kubectl get clusterissuer -o wide -all-namespace
+  298  2024-11-24 19:32:40 kubectl get clusterissuer -o wide --all-namespaces
+  299  2024-11-24 19:34:20 kubectl get issuers  -o wide --all-namespaces
+  300  2024-11-24 19:34:48 kubectl remove -f letsencrypt-issuer.yaml 
+  301  2024-11-24 19:34:55 kubectl delete -f letsencrypt-issuer.yaml 
+  302  2024-11-24 19:40:32 microk8s kubectl create ingress jenkins-ingress     --namespace jenkins     --annotation cert-manager.io/issuer=letsencrypt     --rule 'jenkins.moradores.es/*=jenkins:8080,tls=jenkins-tls'
+  303  2024-11-24 19:41:48 kubectl get configmap -n ingress
+  304  2024-11-24 19:42:21 kubectl get ingress -n jenkins
+  305  2024-11-24 19:42:38 kubectl get ingress --all-namespaces
+  306  2024-11-24 19:43:04 kubectl get pods --all-namespaces
+  307  2024-11-24 19:44:17 history | grep "challenge"
+  308  2024-11-24 19:44:31 kubectl get challenges -n cert-manager -o wide
+  309  2024-11-24 19:44:47 kubectl get challenges --all-namespaces
+  310  2024-11-24 19:46:22 kubectl logs -n cert-manager deploy/cert-manager
+  311  2024-11-24 19:51:17 kubectl edit certificaterequests.cert-manager.io\jenkins-tls-1
+  312  2024-11-24 19:52:02 kubectl get all --all-namespaces
+  313  2024-11-24 19:54:09 kubectl describe issuer jenkins-issuer -n jenkins
+  314  2024-11-24 19:54:32 kubectl get issuers -n jenkins
+  315  2024-11-24 19:54:44 kubectl get ingress -n jenkins
+  316  2024-11-24 19:55:06 kubectl describe ingress jenkins-ingress -n jenkins
+  317  2024-11-24 19:55:15 kubectl describe ingress jenkins-ingress -n jenkins -o yaml
+  318  2024-11-24 20:03:45 vi letsencrypt-issuer.yaml 
+  319  2024-11-24 20:07:36 kubectl logs -n cert-manager deploy/cert-manager
+  320  2024-11-24 20:08:16 date
+  321  2024-11-24 20:08:47 kubectl get challenges --all-namespaces
+  322  2024-11-24 20:09:25 microk8s kubectl delete ingress jenkins-ingress --namespace jenkins
+  323  2024-11-24 20:09:38 vi jenkins_helm-ingress.yaml 
+  324  2024-11-24 20:14:36 kubectl apply -f jenkins_helm-ingress.yaml 
+  325  2024-11-24 20:15:07 kubectl logs -n cert-manager deploy/cert-manager
+  326  2024-11-24 20:17:00 kubectl describe certificaterequest jenkins-tls-1 -n jenkins
+  327  2024-11-24 20:18:20 kubectl get issuers --all-namespaces
+  328  2024-11-24 20:18:23 kubectl get issuers --all-namespace
+  329  2024-11-24 20:18:31 kubectl get issuer --all-namespace
+  330  2024-11-24 20:18:45 kubectl get issuers
+  331  2024-11-24 20:18:54 kubectl get issuers --all-anmespaces
+  332  2024-11-24 20:19:04 vi letsencrypt-issuer.yaml 
+  333  2024-11-24 20:20:03 kubectl apply -f letsencrypt-issuer.yaml 
+  334  2024-11-24 20:20:15 kubectl describe certificaterequest jenkins-tls-1 -n jenkins
+  335  2024-11-24 20:20:44 kubectl logs -n cert-manager deploy/cert-manager
+  336  2024-11-24 20:21:06 kubectl describe certificaterequest jenkins-tls-1 -n jenkins
+  337  2024-11-24 20:22:25 kubectl get certificate -n jenkins
+  338  2024-11-24 20:22:46 kubectl get certificaterequest jenkins-tls-1 -n jenkins -o yaml
+  339  2024-11-24 20:23:10 kubectl logs -n cert-manager deploy/cert-manager
+  340  2024-11-25 07:37:54 cd bc
+  341  2024-11-25 07:38:43 git commit -m "ingress&issuer goods"
+  342  2024-12-03 23:04:30 kubectl get pods -n jenkins
+  343  2024-12-03 23:04:51 kubectl logs jenkins -n jenkins
+  344  2024-12-03 23:04:59 kubectl logs jenkins-0 -n jenkins
+  345  2024-12-03 23:05:43 kubectl exec jenkins-0 -- bash
+  346  2024-12-03 23:05:52 kubectl -n jenkins exec jenkins-0 -- bash
+  347  2024-12-03 23:06:04 kubectl -n jenkins exec jenkins-0 -- /bin/bash
+  348  2024-12-03 23:06:10 kubectl -n jenkins exec jenkins-0 -- /bin/sh
+  349  2024-12-03 23:06:24 kubectl -n jenkins exec -it jenkins-0 -- /bin/sh
+  350  2024-12-03 23:06:33 kubectl -n jenkins exec -it jenkins-0 -- /bin/bash
+  351  2024-12-03 23:10:31 kubectl logs -1000 jenkins-0 -n jenkins
+  352  2024-12-03 23:10:40 kubectl logs --help jenkins-0 -n jenkins
+  353  2024-12-03 23:11:22 kubectl logs --tail=-1 jenkins-0 -n jenkins
+  354  2024-12-03 23:16:55 microk8s helm show values jenkins/jenkins
+  355  2024-12-03 23:20:47 microk8s helm show values jenkins/jenkins | grep "admin"
+  356  2024-12-03 23:22:17 microk8s helm show values jenkins/jenkins | less
+  357  2024-12-03 23:23:53 kubectl get secrets -n jenkins
+  358  2024-12-03 23:24:20 kubectl descrive secret jenkins -n jenkins
+  359  2024-12-03 23:24:30 kubectl describe secret jenkins -n jenkins
+  360  2024-12-03 23:26:10 kubectl get secret jenkins -o jsonpath='{.data}'
+  361  2024-12-03 23:26:20 kubectl -n jenkins get secret jenkins -o jsonpath='{.data}'
+  362  2024-12-03 23:26:38 kubectl -n jenkins get secret jenkins -o jsonpath='{.data}' | base64 --decode
+  363  2024-12-03 23:27:02 sudo apt install base64
+  364  2024-12-03 23:28:16 sudo apt install coreutils
+  365  2024-12-03 23:28:47 kubectl -n jenkins get secret jenkins -o jsonpath='{.data}' | base64 --decode
+  366  2024-12-03 23:28:59 kubectl -n jenkins get secret jenkins -o jsonpath='{.data}'
+  367  2024-12-03 23:32:19 echo 'YWRtaW4='
+  368  2024-12-03 23:32:33 echo 'YWRtaW4=' | base64 --decode
+  369  2024-12-03 23:32:52 echo 'Tk1GQk1CYThMNDdDdGFQZk1mdUF6Mg==' | base64 --decode
+  370  2024-12-16 08:07:18 sudo -i
+  371  2025-02-12 21:49:07 cd snap/
+  372  2025-02-12 21:49:16 cd ..
+  373  2025-02-12 21:50:40 kubectl get namespaces
+  374  2025-02-12 21:51:18 helm get values jenkins -n jenkins
+  375  2025-02-12 21:52:25 curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+  376  2025-02-12 21:53:39 sudo apt-get install apt-transport-https --yes
+  377  2025-02-12 21:53:54 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+  378  2025-02-12 21:54:05 sudo apt-get update
+  379  2025-02-12 21:54:12 sudo apt-get install helm
+  380  2025-02-12 21:54:23 helm get values jenkins -n jenkins
+  381  2025-02-12 21:55:56 microk8s status
+  382  2025-02-12 21:57:56 microk8s helm3 get values jenkins -n jenkins --all
+  383  2025-02-12 21:58:02 microk8s helm3 get values jenkins -n jenkins 
+  384  2025-02-12 21:58:43 microk8s helm3 get values jenkins -n jenkins  > helm-jenkins-values.yaml
+  385  2025-02-12 21:59:46 microk8s helm3 status jenkins -n jenkins
+  386  2025-02-12 22:01:25 microk8s helm3 get manifest jenkins -n jenkins | grep "helm.sh/chart"
+  387  2025-02-12 22:02:41 microk8s helm3 repo update
+  388  2025-02-12 22:02:49 helm repo update
+  389  2025-02-12 22:03:02 microk8s helm3 search repo jenkinsci/jenkins --versions
+  390  2025-02-12 22:03:23 microk8s helm3 search repo jenkins/jenkins --versions
+  391  2025-02-12 22:03:54 microk8s helm3 get manifest jenkins -n jenkins | grep "helm.sh/chart"
+  392  2025-02-12 22:05:31 microk8s helm3 search repo jenkins/jenkins --versions | head -n 1
+  393  2025-02-12 22:05:34 microk8s helm3 search repo jenkins/jenkins --versions | head -n 2
+  394  2025-02-12 22:08:00 microk8s helm3 upgrade jenkins jenkins/jenkins --version 5.8.11 -f helm-jenkins-values.yaml 
+  395  2025-02-12 22:08:16 microk8s helm3 upgrade jenkins jenkins/jenkins --version 5.8.11 -f helm-jenkins-values.yaml -n jenkins
+  396  2025-02-12 22:09:43 kubectl get all -n jenkins
+  397  2025-03-06 07:52:05 sudo -i
+  398  2025-03-13 16:53:04 whereis kubectl
+  399  2025-03-13 16:53:32 ls -la
+  400  2025-03-13 16:53:47 cd /usr/bin/
+  401  2025-03-13 16:55:38 kubectl get pods
+  402  2025-03-13 16:55:45 kubectl get pods -n jenkins
+  403  2025-03-13 16:55:52 kubectl get pods -n default
+  404  2025-03-13 16:55:54 kubectl get pods -n defauld
+  405  2025-03-13 16:56:03 kubectl get namespaces
+  406  2025-03-13 16:56:31 kubectl get pods -n cert-manager
+  407  2025-03-19 12:30:52 sudo -i
+  408  2025-03-29 12:05:29 vi helm-jenkins-values.yaml 
+  409  2025-03-29 12:10:05 helm repo update
+  410  2025-03-29 12:10:21 helm list -n jenkins
+  411  2025-03-29 12:11:16 kubectl helm list -n jenkins
+  412  2025-03-29 12:11:46 kubectl get pods -n cert-manager
+  413  2025-03-29 12:12:31 helm get values jenkins -n jenkins
+  414  2025-03-29 12:13:16 microk8s helm3 search repo jenkins/jenkins --versions | head -n 2
+  415  2025-03-29 12:13:43 microk8s helm3 upgrade jenkins jenkins/jenkins --version 5.8.29 -f helm-jenkins-values.yaml -n jenkins
+  416  2025-03-29 13:00:52 microk8s helm3 repo add gitea-charts https://dl.gitea.io/charts
+  417  2025-03-29 13:01:08 helm repo update
+  418  2025-03-29 13:01:27 kubectl create namespace gitea
+  419  2025-03-29 13:01:38 helm show values gitea-charts/gitea > gitea-values.yaml
+  420  2025-03-29 13:02:40 history | grep "pvc"
+  421  2025-03-29 13:03:24 ls bc-hybrid-cloud-4/
+  422  2025-03-29 13:03:47 cat bc-hybrid-cloud-4/jenkins-namespace-pvc.yaml 
+  423  2025-03-29 13:06:52 cp bc-hybrid-cloud-4/jenkins-namespace-pvc.yaml gitea-namespace-pvc.yaml
+  424  2025-03-29 13:07:06 vi gitea-namespace-pvc.yaml 
+  425  2025-03-29 13:08:01 cp bc-hybrid-cloud-4/jenkins-namespace-pvc.yaml gitea-namespace-pvc.yaml
+  426  2025-03-29 13:08:10 cay gitea-namespace-pvc.yaml 
+  427  2025-03-29 13:08:14 cat gitea-namespace-pvc.yaml 
+  428  2025-03-29 13:08:56 kubectl apply -f gitea-namespace-pvc.yaml 
+  429  2025-03-29 13:11:08 vi gitea-values.yaml 
+  430  2025-03-29 13:19:28 microk8s helm3 get values jenkins --namespace jenkins --all
+  431  2025-03-29 13:28:48 microk8s helm3 get values jenkins --namespace jenkins --all | less
+  432  2025-03-29 15:58:26 mv gitea-values.yaml helm-gitea-values.yaml 
+  433  2025-03-29 15:59:05 vi helm-gitea-values.yaml
+  434  2025-03-29 15:59:27 cat helm-jenkins-values.yaml
+  435  2025-03-29 16:01:19 vi helm-gitea-values.yaml
+  436  2025-03-29 16:16:46 microk8s helm3 install gitea gitea-charts/gitea -f helm-gitea-values.yaml -n gitea
+  437  2025-03-29 16:26:56 kubectl annotate pvc gitea-pvc -n gitea meta.helm.sh/release-name=gitea
+  438  2025-03-29 16:27:05 kubectl annotate pvc gitea-pvc -n gitea meta.helm.sh/release-namespace=gitea
+  439  2025-03-29 16:27:15 kubectl label pvc gitea-pvc -n gitea app.kubernetes.io/managed-by=Helm
+  440  2025-03-29 16:27:23 microk8s helm3 install gitea gitea-charts/gitea -f helm-gitea-values.yaml -n gitea
+  441  2025-03-29 16:33:38 microk8s helm3 uninstall gitea gitea-charts/gitea -n gitea
+  442  2025-03-29 16:33:48 microk8s helm3 uninstall gitea -n gitea
+  443  2025-03-29 16:33:58 microk8s helm3 install gitea gitea-charts/gitea -f helm-gitea-values.yaml -n gitea
+  444  2025-03-29 16:20:29 vi helm-gitea-values.yaml 
+  445  2025-03-29 16:19:14 microk8s helm3 show values gitea-charts/gitea | less
+  446  2025-03-29 16:37:21 kubecetl get all -n gitea
+  447  2025-03-29 16:37:25 kubectl get all -n gitea
+  448  2025-03-29 16:39:16 kubectl get all -n jenkins
+  449  2025-03-29 16:39:45 kubectl get namespaces
+  450  2025-03-29 16:40:07 kubectl get all -n cert-manager
+  451  2025-03-29 16:42:38 kubectl get all -n ingress
+  452  2025-03-29 16:52:51 kubectl get all -n jenkins
+  453  2025-03-29 16:53:30 kubectl describre statefulset.apps/jenkins
+  454  2025-03-29 16:53:36 kubectl describe statefulset.apps/jenkins
+  455  2025-03-29 16:53:49 kubectl describe statefulset.apps/jenkins -n jenkins
+  456  2025-03-29 16:54:26 kubectl get all -n jenkins
+  457  2025-03-29 16:54:43 kubectl describe service/jenkins -n jenkins
+  458  2025-03-29 16:55:22 kubectl describe statefulset.apps/jenkins -n nginx
+  459  2025-03-29 16:55:41 kubectl get namespaces
+  460  2025-03-29 16:56:06 kubectl get all -n default
+  461  2025-03-29 16:56:41 kubectl get namespaces cermanger
+  462  2025-03-29 16:56:47 kubectl get namespaces cert-manager
+  463  2025-03-29 16:56:59 kubectl get all -n cert-manager
+  464  2025-03-29 16:57:47 kubectl describe service/cert-manager -n cert-manager
+  465  2025-03-29 16:58:15 kubectl describe service/cert-manager-webhook -n cert-manager
+  466  2025-03-29 16:51:51 vi letsencrypt-issuer.yaml 
+  467  2025-03-29 16:58:49 cd ..
+  468  2025-03-29 16:59:03 grep -Iirn "moradores.es"
+  469  2025-03-29 17:03:46 kubectl get all -n cert-manager
+  470  2025-03-29 17:04:12 kubectl describe deployment.apps/cert-manager -n cert-manager
+  471  2025-03-29 17:05:04 kubectl get all -n ingress
+  472  2025-03-29 17:05:36 kubectl describe daemonset.apps/nginx-ingress-microk8s-controller -n ingress
+  473  2025-03-29 17:06:24 kubectl get all -n jenkins
+  474  2025-03-29 17:06:59 kubectl describe statefulset.apps/jenkins -n jenkins
+  475  2025-03-29 17:08:31 cat jenkins_helm-ingress.yaml 
+  476  2025-03-29 17:09:53 kubectl get ingress jenkins-ingress -n jenkins
+  477  2025-03-29 17:10:33 kubectl get all -n jenkins
+  478  2025-03-29 17:13:02 kubectl get ingress jenkins-ingress -n jenkins -o yaml
+  479  2025-03-29 17:39:52 kubectl get ingress jenkins-ingress -n jenkins -o yaml > gitea-ingress.yaml
+  480  2025-03-29 17:40:05 vi gitea-ingress.yaml 
+  481  2025-03-29 17:47:59 cd ..
+  482  2025-03-29 17:49:40 kubectl get all -n jenkins
+  483  2025-03-29 17:49:54 kubectl get all -n gitea
+  484  2025-03-29 17:53:09 kubectl apply -f gitea-ingress.yaml 
+  485  2025-03-29 18:07:01 kubectl logs -n cert-manager deploy/cert-manager
+  486  2025-03-29 18:11:02 sudo snap refresh microk8s
+  487  2025-03-29 18:11:28 microk8s disable cert-manager
+  488  2025-03-29 18:11:44 microk8s enable cert-manager
+  489  2025-03-29 18:13:37 microk8s kubectl apply -f - <<EOF
+  490  2025-06-22 15:43:34 ---
+  491  2025-06-22 15:43:34 apiVersion: cert-manager.io/v1
+  492  2025-06-22 15:43:34 kind: Issuer
+  493  2025-06-22 15:43:34 metadata:
+  494  2025-06-22 15:43:34   name: letsencrypt
+  495  2025-06-22 15:43:34 spec:
+  496  2025-06-22 15:43:34   acme:
+  497  2025-06-22 15:43:34     # You must replace this email address with your own.
+  498  2025-06-22 15:43:34     # Let's Encrypt will use this to contact you about expiring
+  499  2025-06-22 15:43:34     # certificates, and issues related to your account.
+  500  2025-06-22 15:43:34     email: me@example.com
+  501  2025-06-22 15:43:34     server: https://acme-v02.api.letsencrypt.org/directory
+  502  2025-06-22 15:43:34     privateKeySecretRef:
+  503  2025-06-22 15:43:34       # Secret resource that will be used to store the account's private key.
+  504  2025-06-22 15:43:34       name: letsencrypt-account-key
+  505  2025-06-22 15:43:34     # Add a single challenge solver, HTTP01 using nginx
+  506  2025-06-22 15:43:34     solvers:
+  507  2025-06-22 15:43:34     - http01:
+  508  2025-06-22 15:43:34         ingress:
+  509  2025-06-22 15:43:34           ingressClassName: nginx
+  510  2025-06-22 15:43:34 EOF
+  511  2025-03-29 18:14:45 kubectl remove -f gitea-ingress.yaml 
+  512  2025-03-29 18:14:53 kubectl delete -f gitea-ingress.yaml 
+  513  2025-03-29 18:17:38 microk8s kubectl create ingress gitea-ingress     --annotation cert-manager.io/issuer=letsencrypt     --rule 'gitea.moradores.es/*=gittea-http:3000,tls=gitea-service-tls'
+  514  2025-03-29 18:21:48 git log gitea -n gitea 
+  515  2025-03-29 18:21:56 kubectl log gitea -n gitea 
+  516  2025-03-29 18:22:01 kubectl logs gitea -n gitea 
+  517  2025-03-29 18:22:23 vi helm-gitea-values.yaml 
+  518  2025-03-29 18:22:31 kubectl get all -n gitea
+  519  2025-03-29 18:30:41 vi helm-gitea-values.yaml 
+  520  2025-03-29 18:32:54 kubectl get pods -n gitea
+  521  2025-03-29 18:33:38 kubectl exec -it gitea-6977f8775d-kqrwq -- /bin/bash
+  522  2025-03-29 18:34:00 kubectl exec -it gitea-6977f8775d-kqrwq -- /bin/bash -n gitea
+  523  2025-03-29 18:34:17 kubectl -n gitea exec -it gitea-6977f8775d-kqrwq -- /bin/bash
+  524  2025-03-29 18:36:45 kubectl get pods -n gitea
+  525  2025-03-29 18:37:17 kubectl remove pod gitea-6977f8775d-kqrwq
+  526  2025-03-29 18:37:25 kubectl delete pod gitea-6977f8775d-kqrwq
+  527  2025-03-29 18:37:31 kubectl delete pod gitea-6977f8775d-kqrwq -n gittea
+  528  2025-03-29 18:37:34 kubectl delete pod gitea-6977f8775d-kqrwq -n gitea
+  529  2025-03-29 18:37:44 kubectl get pods -n gitea
+  530  2025-03-29 18:38:51 kubectl -n gitea exec -it gitea-6977f8775d-vll28 -- /bin/bash
+  531  2025-03-29 18:23:33 microk8s helm3 get values gitea --namespace gitea --all | less
+  532  2025-03-29 19:02:11 mv *.yaml ./bc-hybrid-cloud-4/
+  533  2025-03-29 19:02:56 git commit -m "gitea"
+  534  2025-03-29 19:04:38 vi gitea-service-ssh.yaml
+  535  2025-03-29 19:06:19 kubectl apply -f gitea-service-ssh.yaml
+  536  2025-03-29 19:06:58 kubectl delete -f gitea-service-ssh.yaml
+  537  2025-03-29 19:07:24 vi gitea-service-ssh.yaml
+  538  2025-03-29 19:10:05 kubectl apply -f gitea-service-ssh.yaml
+  539  2025-03-29 19:16:47 cat gitea-service-ssh.yaml 
+  540  2025-03-29 19:17:20 kubectl delete -f gitea-service-ssh.yaml
+  541  2025-03-29 19:17:47 kubectl get all -n gitea
+  542  2025-03-29 19:20:51 microk8s helm3 update gitea gitea-charts/gitea -f helm-gitea-values.yaml -n gitea
+  543  2025-03-29 19:21:03 microk8s helm3 reinstall gitea gitea-charts/gitea -f helm-gitea-values.yaml -n gitea
+  544  2025-03-29 19:22:13 microk8s helm3 search repo gitea-charts/gitea --versions | head -n 2
+  545  2025-03-29 19:24:07 microk8s helm3 upgrade gitea gitea-charts/gitea --version 11.0.1 -f helm-gitea-values.yaml -n gitea
+  546  2025-03-29 19:24:32 kubectl get all -n gitea
+  547  2025-03-29 19:32:01 kubectl -n gitea describe service/gitea-ssh -o yaml
+  548  2025-03-29 19:32:05 kubectl -n gitea describe service/gitea-ssh -
+  549  2025-03-29 19:32:10 kubectl -n gitea describe service/gitea-ssh 
+  550  2025-03-29 19:32:24 kubectl -n gitea -o yaml describe service/gitea-ssh 
+  551  2025-03-29 19:32:46 kubectl get describe service/gitea-ssh -o yaml
+  552  2025-03-29 19:32:53 kubectl get service/gitea-ssh -o yaml
+  553  2025-03-29 19:33:06 kubectl -n gitea get service/gitea-ssh -o yaml
+  554  2025-03-29 19:37:47 kubectl port-forward -n gitea service/gitea-ssh 2222:22
+  555  2025-03-29 19:38:13 kubectl port-forward -n gitea service/gitea-ssh 22:2222
+  556  2025-03-29 19:38:17 kubectl port-forward -n gitea service/gitea-ssh 2222:22
+  557  2025-03-29 19:39:05 kubectl port-forward -n gitea service/gitea-ssh 2222:2222
+  558  2025-03-29 19:39:23 kubectl get all -n gitea
+  559  2025-03-29 19:40:17 ss -pltn
+  560  2025-03-29 19:39:58 kubectl port-forward -n gitea service/gitea-ssh 2222:22
+  561  2025-03-29 19:41:32 kubectl port-forward -n gitea service/gitea-ssh 0.0.0.0:2222:22
+  562  2025-03-29 19:42:07 kubectl port-forward -n gitea service/gitea-ssh 2222:22
+  563  2025-03-29 19:42:24 kubectl port-forward -n gitea service/gitea-ssh 0.0.0.0:2222:22
+  564  2025-03-29 19:42:53 kubectl port-forward -n gitea service/gitea-ssh *:2222:22
+  565  2025-03-29 19:43:42 kubectl port-forward --help
+  566  2025-03-29 19:44:34 kubectl port-forward -n gitea service/gitea-ssh --address=0.0.0.0 2222:22
+  567  2025-03-29 19:46:09 ip -a
+  568  2025-03-29 19:46:31 ip -s
+  569  2025-03-29 19:47:29 ip a
+  570  2025-03-29 19:48:05 kubectl port-forward -n gitea service/gitea-ssh --address=192.168.88.211 2222:22
+  571  2025-03-29 19:50:33 kubectl port-forward -n gitea service/gitea-ssh --address=0.0.0.0 --address=:: 2222:22
+  572  2025-03-29 19:51:41 kubectl get pods -n gitea
+  573  2025-03-29 19:52:24 kubectl port-forward -n gitea pod/gitea-6977f8775d-vll28 --address=0.0.0.0 --address=:: 2222:22
+  574  2025-03-29 19:52:38 kubectl port-forward -n gitea pod/gitea-6977f8775d-vll28 --address=0.0.0.0 --address=:: 2222:2222
+  575  2025-03-29 20:48:33 kubectl -n gitea get service/gitea-ssh -o yaml
+  576  2025-03-29 20:48:44 kubectl -n gitea get service/gitea-ssh -o yaml
+  577  2025-03-29 20:49:05 kubectl -n gitea get service/gitea-ssh -o yaml > gitea-service-ssh.yaml 
+  578  2025-03-29 20:49:26 rm gitea-service-ssh.yaml
+  579  2025-03-29 20:49:28 kubectl -n gitea get service/gitea-ssh -o yaml > gitea-service-ssh.yaml 
+  580  2025-03-29 20:49:43 vi gitea-service-ssh.yaml 
+  581  2025-03-29 20:57:12 kubectl apply -f gitea-service-ssh.yaml 
+  582  2025-03-29 21:01:04 kubectl -n gitea describe service/gitea-ssh exit
+  583  2025-04-22 07:40:37 sudo -i
+  584  2025-05-08 21:25:23 ip a
+  585  2025-05-23 08:00:33 sudo -i
+  586  2025-05-23 08:10:25 kubectl get ns
+  587  2025-05-23 08:11:42 kubectl get pods -ngitea
+  588  2025-05-23 08:14:20 kubectl logs gitea-postgresql-ha-pgpool-85668b9587-hkk5t
+  589  2025-05-23 08:14:35 kubectl logs gitea-postgresql-ha-pgpool-85668b9587-hkk5t -n gitea
+  590  2025-05-23 21:04:42 kubectl get pods -ngitea
+  591  2025-05-23 21:05:33 kubectl logs gitea-postgresql-ha-pgpool-85668b9587-hkk5t -n gitea
+  592  2025-05-23 21:05:35 kubectl get pods -ngitea
+  593  2025-05-23 21:06:07 kubectl logs gitea-postgresql-ha-postgresql-0 -n gitea
+  594  2025-05-23 21:07:38 kubectl get pods -ngitea
+  595  2025-05-23 21:08:06 kubectl logs gitea-6977f8775d-vll28 -n gitea
+  596  2025-05-23 21:08:26 kubectl get pods -ngitea
+  597  2025-05-23 21:08:46 kubectl get all -ngitea
+  598  2025-05-23 21:09:38 kubectl describe deployment.apps/gitea-postgresql-ha-pgpool -ngitea
+  599  2025-05-23 21:12:32 helm list -n gitea
+  600  2025-05-23 21:14:08 microk8s helm3 list -n gitea
+  601  2025-05-23 21:14:31 microk8s helm3 repo update
+  602  2025-05-23 21:17:24 microk8s helm3 get values gitea -n gitea -o yaml > gitea-values.yaml
+  603  2025-05-23 21:17:39 cat gitea-values.yaml 
+  604  2025-05-23 21:19:18 microk8s helm3 upgrade gitea gitea/gitea   -n gitea   -f gitea-values.yaml
+  605  2025-05-23 21:21:19 microk8s helm3 list
+  606  2025-05-23 21:21:27 microk8s helm3 list --help
+  607  2025-05-23 21:22:53 microk8s helm3 repo list 
+  608  2025-05-23 21:26:23 microk8s helm3 upgrade gitea gitea-charts/gitea   -n gitea   -f gitea-values.yaml
+  609  2025-05-23 21:27:19 microk8s helm list -n jenkins
+  610  2025-05-23 21:27:30 microk8s helm3 repo list 
+  611  2025-05-23 21:28:52 microk8s helm3 get values jenkins -n jenkins -o yaml > jenkins-values.yaml
+  612  2025-05-23 21:33:51 kubectl get all -ngitea
+  613  2025-05-23 21:36:08 kubectl -ngitea delete replicaset.apps/gitea-postgresql-ha-pgpool-85668b9587
+  614  2025-05-23 21:37:04 kubectl -ngitea delete replicaset.apps/gitea-6977f8775d
+  615  2025-05-23 21:37:17 kubectl get all -ngitea
+  616  2025-05-23 21:40:40 microk8s kubectl get pvc -ngitea
+  617  2025-05-23 21:42:35 microk8s kubectl scale deployment gitea -n gitea --replicas=0
+  618  2025-05-23 21:42:47 kubectl get all -ngitea
+  619  2025-05-23 21:47:36 microk8s kubectl scale statefulset gitea-postgresql-ha-postgresql -n gitea --replicas=0
+  620  2025-05-23 21:47:36 microk8s kubectl scale statefulset gitea-valkey-cluster -n gitea --replicas=0
+  621  2025-05-23 21:47:51 microk8s kubectl scale deployment gitea-postgresql-ha-pgpool -n gitea --replicas=0
+  622  2025-05-23 21:48:48 kubectl -ngitea delete pods *
+  623  2025-05-23 21:49:30 kubectl -ngite get pods
+  624  2025-05-23 21:49:41 kubectl -ngitea get pods
+  625  2025-05-23 21:49:57 kubectl get all -ngitea
+  626  2025-05-23 21:50:44 microk8s helm3 upgrade gitea gitea-charts/gitea   -n gitea   -f gitea-values.yaml
+  627  2025-05-23 21:50:59 kubectl get all -ngitea
+  628  2025-05-23 21:51:48 kubectl -ngitea logs  pod/gitea-866d8fdf7f-pm7n5  
+  629  2025-05-23 21:52:32 kubectl get all -ngitea
+  630  2025-05-23 21:54:29 microk8s kubectl scale deployment gitea-postgresql-ha-pgpool -n gitea --replicas=1
+  631  2025-05-23 21:54:56 microk8s kubectl scale deployment gitea -n gitea --replicas=1
+  632  2025-05-23 21:55:02 kubectl get all -ngitea
+  633  2025-05-23 21:55:52 kubectl -ngitea logs  pod/gitea-postgresql-ha-pgpool-6c46cd8dbf-6qk4t  
+  634  2025-05-23 21:59:20 microk8s kubectl get svc -n gitea
+  635  2025-05-23 22:00:25 microk8s kubectl exec -n gitea -it pod/gitea-valkey-cluster-0 -- /bin/sh
+  636  2025-05-23 22:03:45 microk8s kubectl run -i --tty dnsutils --image=busybox --restart=Never --rm -- sh
+  637  2025-05-23 22:06:26 microk8s kubectl get endpoints -n gitea
+  638  2025-05-23 22:07:23 microk8s kubectl logs -n gitea gitea-postgresql-ha-postgresql-0
+  639  2025-05-23 22:07:55 kubectl get pods gitea
+  640  2025-05-23 22:08:03 kubectl get pods -ngitea
+  641  2025-05-23 22:09:49 microk8s kubectl logs -n gitea gitea-postgresql-ha-pgpool-6c46cd8dbf-6qk4t
+  642  2025-05-23 22:10:33 get all -ngitea
+  643  2025-05-23 22:10:43 kubectl get all -ngitea
+  644  2025-05-23 22:11:28 microk8s kubectl delete pod gitea-postgresql-ha-pgpool-6c46cd8dbf-6qk4t
+  645  2025-05-23 22:11:34 kubectl get all -ngitea
+  646  2025-05-23 22:12:07 kubectl -ngitea delete pod gitea-postgresql-ha-pgpool-6c46cd8dbf-6qk4t
+  647  2025-05-24 00:12:08 kubectl get all -ngitea
+  648  2025-05-24 00:12:36 kubectl log pod/gitea-866d8fdf7f-pm7n5
+  649  2025-05-24 00:12:42 kubectl logs pod/gitea-866d8fdf7f-pm7n5
+  650  2025-05-24 00:12:56 kubectl logs gitea-866d8fdf7f-pm7n5
+  651  2025-05-24 00:13:01 kubectl get all -ngitea
+  652  2025-05-24 00:13:11 kubectl logs pod/gitea-866d8fdf7f-pm7n5
+  653  2025-05-24 00:13:23 kubectl get all -ngitea
+  654  2025-05-24 00:13:43 kubectl -n gitea logs pod/gitea-866d8fdf7f-pm7n5
+  655  2025-05-24 00:14:24 kubecte -n gite delete pod/gitea-866d8fdf7f-pm7n5
+  656  2025-05-24 00:14:31 kubectl -n gite delete pod/gitea-866d8fdf7f-pm7n5
+  657  2025-05-24 00:14:47 kubectl -n gitea delete pod/gitea-866d8fdf7f-pm7n5
+  658  2025-05-24 00:17:00 kubectl -ngitea delete service/*
+  659  2025-05-24 00:18:11 kubectl -ngitea  delete svc --all 
+  660  2025-05-24 00:18:58 kubectl -ngitea  delete pods --all 
+  661  2025-05-24 00:19:17 kubectl -n gitea get all
+  662  2025-05-24 00:19:40 kubectl -ngitea  delete statefulset --all 
+  663  2025-05-24 00:19:59 kubectl -ngitea  delete replicaset --all 
+  664  2025-05-24 00:20:18 kubectl -ngitea  delete deployment --all 
+  665  2025-05-24 00:20:25 kubectl -ngitea  delete pods --all 
+  666  2025-05-24 00:20:36 kubectl -n gitea get all
+  667  2025-05-24 00:21:06 microk8s helm3 upgrade gitea gitea-charts/gitea -n gitea -f gitea-values.yaml
+  668  2025-05-24 00:21:25 kubectl get all -ngitea
+  669  2025-05-24 00:22:25 kubectl -n gitea logs pod/gitea-866d8fdf7f-hr6fz
+  670  2025-05-24 00:23:00 kubectl -n gitea logs pod/gitea-postgresql-ha-pgpool-6c46cd8dbf-9xjkn
+  671  2025-05-24 00:25:18 microk8s kubectl exec -n gitea gitea-postgresql-ha-pgpool-6c46cd8dbf-9xjkn -- printenv | grep -i host
+  672  2025-05-24 00:26:52 kubectl -n gitea get svc
+  673  2025-05-24 00:28:30 microk8s kubectl get endpoints -n gitea
+  674  2025-05-24 00:30:16 helm uninstall -n gitea gittea
+  675  2025-05-24 00:30:33 microk8s helm3 uninstall -n gitea gittea
+  676  2025-05-24 00:30:37 microk8s helm3 uninstall -n gitea gitea
+  677  2025-05-24 00:30:57 kubectl get all -ngitea
+  678  2025-05-24 00:31:30 microk8s helm3 upgrade gitea gitea-charts/gitea -n gitea -f gitea-values.yaml
+  679  2025-05-24 00:31:53 microk8s helm3 install gitea gitea-charts/gitea -n gitea -f gitea-values.yaml
+  680  2025-05-24 00:31:58 kubectl get all -ngitea
+  681  2025-05-24 00:32:42 kubectl -n gitea logs pod/gitea-postgresql-ha-pgpool-6c46cd8dbf-z94rb
+  682  2025-05-24 10:55:50 vi gitea-values.yaml 
+  683  2025-05-24 10:56:49 kubectl -ngitea get pvc
+  684  2025-05-24 10:57:51 microk8s helm3 uninstall -n gitea gitea
+  685  2025-05-24 10:58:09 kubectl -ngitea get pvc
+  686  2025-05-24 10:59:33 kubectl -n gitea delete pvc data-gitea-postgresql-ha-postgresql-0 data-gitea-postgresql-ha-postgresql-1  data-gitea-postgresql-ha-postgresql-2  redis-data-gitea-redis-cluster-0 redis-data-gitea-redis-cluster-1 redis-data-gitea-redis-cluster-2 valkey-data-gitea-valkey-cluster-0 valkey-data-gitea-valkey-cluster-1 valkey-data-gitea-valkey-cluster-2
+  687  2025-05-24 10:59:37 kubectl -ngitea get pvc
+  688  2025-05-24 10:59:49 microk8s helm3 install gitea gitea-charts/gitea -n gitea -f gitea-values.yaml
+  689  2025-05-24 11:00:04 kubectl get all -n gitea
+  690  2025-05-24 11:01:41 microk8s helm3 uninstall -n gitea gitea
+  691  2025-05-24 11:01:54 kubectl -ngitea get pvc
+  692  2025-05-24 11:02:47 kubectl -n --all
+  693  2025-05-24 11:03:09 kubectl -n gitea delete pvc --all
+  694  2025-05-24 11:03:12 kubectl -ngitea get pvc
+  695  2025-05-24 11:03:18 kubectl get all -n gitea
+  696  2025-05-24 11:03:36 kubectl delete ns ngitea
+  697  2025-05-24 11:03:43 kubectl delete ns gitea
+  698  2025-05-24 11:03:57 kubectl create ns gitea
+  699  2025-05-24 11:04:05 microk8s helm3 install gitea gitea-charts/gitea -n gitea -f gitea-values.yaml
+  700  2025-05-24 11:04:15 kubectl get all -n gitea
+  701  2025-05-24 11:07:09 kubectl logs pod/gitea-postgresql-ha-pgpool-6c46cd8dbf-w5w8v -n gitea
+  702  2025-05-24 11:15:50 cat gitea-service-ssh.yaml 
+  703  2025-05-24 11:16:30 ls -la | grep gitea
+  704  2025-05-24 11:16:46 vi helm-gitea-values.yaml 
+  705  2025-05-24 11:17:36 vit gitea-namespace-pvc.yaml 
+  706  2025-05-24 11:17:39 vi gitea-namespace-pvc.yaml 
+  707  2025-05-24 11:47:32 cd ..
+  708  2025-05-24 11:47:54 helm show values gitea-charts/gitea > gitea-all-values.yaml
+  709  2025-05-24 11:48:00 vi gitea-all-values.yaml 
+  710  2025-05-24 11:56:25 helm show chart gitea-charts/gitea
+  711  2025-05-24 11:59:55 microk8s helm3 pull gitea-charts/gitea --untar --untardir ./gitea-chart
+  712  2025-05-24 12:00:07 cd gitea-chart/
+  713  2025-05-24 12:00:19 cd gitea
+  714  2025-05-24 12:00:41 cd chart
+  715  2025-05-24 12:00:43 cd charts
+  716  2025-05-24 12:01:02 cd postgresql-ha
+  717  2025-05-24 12:01:17 vi values
+  718  2025-05-24 12:01:21 vi values.yaml 
+  719  2025-05-24 12:14:57 cd ..
+  720  2025-05-24 12:15:02 cd postgresql
+  721  2025-05-24 12:15:12 vi values.yaml 
+  722  2025-05-24 12:17:36 cd..
+  723  2025-05-24 12:18:07 cd ..
+  724  2025-05-24 12:18:15 ls -la
+  725  2025-05-24 12:18:19 cd ..
+  726  2025-05-24 12:24:32 cd gitea-chart/
+  727  2025-05-24 12:24:40 cd gitea
+  728  2025-05-24 12:25:27 microk8s delete ns gitea
+  729  2025-05-24 12:25:44 kubectl delete ns gitea
+  730  2025-05-24 12:28:29 microk8s helm3 dependency update
+  731  2025-05-24 12:30:17 kubectl apply ../../bc-hybrid-cloud-4/gitea-namespace-pvc.yaml 
+  732  2025-05-24 12:30:27 kubectl apply -f ../../bc-hybrid-cloud-4/gitea-namespace-pvc.yaml 
+  733  2025-05-24 12:31:50 cd..
+  734  2025-05-24 12:32:44 microk8s helm3 upgrade --install gitea ./gitea -n gitea -f ../gitea-values.yaml 
+  735  2025-05-24 12:32:54 cd
+  736  2025-05-24 12:33:09 kubectl get all -n gitea
+  737  2025-05-24 12:34:03 kubectl get ns
+  738  2025-05-24 12:34:36 kubectl get all -n default
+  739  2025-05-24 12:35:26 kubectl get all -n kube-system
+  740  2025-05-24 12:35:46 kubectl get all -n kube-public
+  741  2025-05-24 12:35:55 kubectl get all -n kube-node-lease
+  742  2025-05-24 12:36:05 kubectl get all -n ingress
+  743  2025-05-24 12:36:19 kubectl get all -n cert-manager
+  744  2025-05-24 12:36:29 kubectl get all -n jenkins
+  745  2025-05-24 12:36:43 kubectl get all -n gitea
+  746  2025-05-24 12:37:20 kubectl -n gitea logs pod/gitea-postgresql-ha-pgpool-68696f5c8b-h6lfz
+  747  2025-05-24 12:38:20 ls bc-hybrid-cloud-4/
+  748  2025-05-24 12:38:41 cat gitea-service-ssh.yaml
+  749  2025-05-24 12:38:51 cat bc-hybrid-cloud-4/gitea-service-ssh.yaml
+  750  2025-05-24 12:39:10 kubectl apply -f bc-hybrid-cloud-4/gitea-service-ssh.yaml
+  751  2025-05-24 12:39:33 ls bc-hybrid-cloud-4/ | grep gitea
+  752  2025-05-24 12:39:54 kubectl apply -f bc-hybrid-cloud-4/gitea-ingress.yaml
+  753  2025-05-24 12:40:08 kubectl get all -n gitea
+  754  2025-05-24 12:42:32 kubectl -n gitea logs pod/gitea-postgresql-ha-pgpool-68696f5c8b-h6lfz
+  755  2025-05-24 12:43:39 kubectl get all -n gitea
+  756  2025-05-24 12:47:29 cat gitea-values.yaml 
+  757  2025-05-24 12:52:32 kubectl -n gitea logs pod/gitea-postgresql-ha-pgpool-68696f5c8b-h6lfz
+  758  2025-05-24 12:54:01 vi gitea-values.yaml 
+  759  2025-05-24 12:55:46 microk8s helm3 upgrade --install gitea ./gitea-chart/gitea -n gitea -f gitea-values.yaml
+  760  2025-05-24 12:55:56 kubectl get all -n gitea
+  761  2025-05-24 12:56:54 kubectl -ngitea delete pods pod/gitea-866d8fdf7f-mbktg pod/gitea-postgresql-ha-pgpool-68696f5c8b-h6lfz
+  762  2025-05-24 12:57:09 kubectl -ngitea delete pods gitea-866d8fdf7f-mbktg gitea-postgresql-ha-pgpool-68696f5c8b-h6lfz
+  763  2025-05-24 12:57:14 kubectl get all -n gitea
+  764  2025-05-24 12:57:54 kubectl -n gitea logs pod/gitea-postgresql-ha-pgpool-68696f5c8b-d4xp4
+  765  2025-05-24 13:01:17 cd gitea-chart/gitea/
+  766  2025-05-24 13:01:34 grep -Iirn "service"
+  767  2025-05-24 13:03:35 history | more
+  768  2025-05-24 13:07:56 grep -Iirn "service"
+  769  2025-05-24 13:08:03 grep -Iirn "service" *.yaml
+  770  2025-05-24 13:08:41 grep -Iirn "name" *.yaml
+  771  2025-05-24 13:09:12 grep -Iirn "ip" *.yaml
+  772  2025-05-24 13:10:21 grep -Iirn "postgres" *.yaml
+  773  2025-05-24 18:44:21 cd charts/postgresql-ha
+  774  2025-05-24 18:44:28 vi values.yaml 
+  775  2025-05-24 18:52:06 cd
+  776  2025-05-24 18:52:33 kubectl get all -n gitea
+  777  2025-05-24 18:54:16 kubectl -n gitea rollout restart sts/gitea-postgresql-ha-postgresql
+  778  2025-05-24 18:54:42 kubectl get all -n gitea
+  779  2025-05-24 18:54:57 kubectl -n gitea rollout restart sts/gitea-postgresql-ha-postgresql
+  780  2025-05-24 18:55:01 kubectl get all -n gitea
+  781  2025-05-24 18:57:56 kubectl -ngitea delete pod gitea-postgresql-ha-pgpool-68696f5c8b-d4xp4
+  782  2025-05-24 18:57:59 kubectl get all -n gitea
+  783  2025-05-24 18:59:01 kubectl -n gitea describe pod gitea-postgresql-ha-pgpool-68696f5c8b-zqgdn
+  784  2025-05-24 19:05:06 vi gitea-values.yaml 
+  785  2025-05-24 19:09:02 microk8s helm3 upgrade --install gitea ./gitea-chart/gitea -n gitea -f gitea-values.yaml
+  786  2025-05-24 19:09:14 kubectl get all -n gitea
+  787  2025-05-24 19:09:39 kubectl -ngitea delete pod/gitea-postgresql-ha-pgpool-68696f5c8b-zqgdn
+  788  2025-05-24 19:09:44 kubectl get all -n gitea
+  789  2025-05-24 19:10:10 kubectl -ngitea describe pod/gitea-postgresql-ha-pgpool-68696f5c8b-pnbww
+  790  2025-05-24 19:11:18 ip a
+  791  2025-05-24 19:11:27 ip a | grep 211
+  792  2025-05-24 19:11:44 ping mikro8s-server
+  793  2025-05-24 19:11:52 ping microk8s-server
+  794  2025-05-24 19:12:07 ping 192.168.88.211
+  795  2025-05-24 19:12:14 kubectl -ngitea describe pod/gitea-postgresql-ha-pgpool-68696f5c8b-pnbww
+  796  2025-05-24 19:17:14 kubectl get all -n gitea
+  797  2025-05-24 19:18:01 kubectl -ngitea logs pod/gitea-postgresql-ha-pgpool-68696f5c8b-pnbww
+  798  2025-05-24 19:26:52 cat /etc/hosts
+  799  2025-05-24 19:27:08 resolvectl status
+  800  2025-05-24 19:27:32 resolvectl flush-caches
+  801  2025-05-24 19:28:14 microk8s disable dns
+  802  2025-05-24 19:29:13 microk8s enable dns
+  803  2025-05-24 19:29:47 kubectl -n gitea rollout restart sts/gitea-postgresql-ha-postgresql
+  804  2025-05-24 19:29:58 kubectl get all -n gitea
+  805  2025-05-24 19:31:17 kubectl -ngitea logs pod/gitea-postgresql-ha-pgpool-68696f5c8b-pnbww
+  806  2025-05-24 19:31:42 kubectl -ngitea delete pod/gitea-postgresql-ha-pgpool-68696f5c8b-pnbww
+  807  2025-05-24 19:31:46 kubectl get all -n gitea
+  808  2025-05-24 19:32:08 kubectl -ngitea logs pod/gitea-postgresql-ha-pgpool-68696f5c8b-6c42c
+  809  2025-05-24 20:27:21 vi gitea-values.yaml 
+  810  2025-05-24 20:28:47 microk8s helm3 uninstall -n gitea gitea
+  811  2025-05-24 20:28:54 kubectl get all -n gitea
+  812  2025-05-24 20:30:33 microk8s helm3 install gitea ./gitea-charts/gitea -n gitea -f gitea-values.yaml
+  813  2025-05-24 20:30:53 microk8s helm3 install gitea ./gitea-chart/gitea -n gitea -f gitea-values.yaml
+  814  2025-05-24 20:31:05 kubectl get all -n gitea
+  815  2025-05-24 20:31:46 kubectl logs -ngitea pod/gitea-postgresql-ha-pgpool-5bb6df7b6d-pllqr
+  816  2025-05-24 20:34:04 kubectl get all -n gitea
+  817  2025-05-24 20:34:26 microk8s kubectl exec -n gitea gitea-postgresql-ha-pgpool-5bb6df7b6d-pllqr -- printenv | grep backend_flag0
+  818  2025-05-24 20:35:52 kubectl get all -n gitea
+  819  2025-05-24 20:36:08 kubectl describe -ngitea pod/gitea-postgresql-ha-pgpool-5bb6df7b6d-pllqr
+  820  2025-05-24 20:37:01 cd gitea-chart/
+  821  2025-05-24 20:37:30 grep -Iirn "failover_on_backend_error"
+  822  2025-05-24 20:37:51 grep -Iirn "failover_on_backend"
+  823  2025-05-24 20:37:58 grep -Iirn "failover"
+  824  2025-05-24 20:39:07 kubectl describe -ngitea pod/gitea-postgresql-ha-pgpool-5bb6df7b6d-pllqr
+  825  2025-05-24 20:44:11 cd ..
+  826  2025-05-24 20:44:14 vi gitea-values.yaml 
+  827  2025-05-24 20:44:58 microk8s helm3 uninstall -n gitea gitea
+  828  2025-05-24 20:45:06 kubectl get all -n gitea
+  829  2025-05-24 20:45:17 microk8s helm3 install gitea ./gitea-chart/gitea -n gitea -f gitea-values.yaml
+  830  2025-05-24 20:45:21 kubectl get all -n gitea
+  831  2025-05-24 20:46:00 kubectl logs -n gitea pod/gitea-postgresql-ha-pgpool-575df85cf-bl575
+  832  2025-05-24 20:46:19 kubectl describe -n gitea pod/gitea-postgresql-ha-pgpool-575df85cf-bl575
+  833  2025-05-24 20:46:56 microk8s kubectl exec -n gitea gitea-postgresql-ha-pgpool-5bb6df7b6d-pllqr -- printenv | grep failover_on_backend_error
+  834  2025-05-24 20:47:24 microk8s kubectl exec -n gitea gitea-postgresql-ha-pgpool-575df85cf-bl575 -- printenv | grep failover_on_backend_error
+  835  2025-05-24 20:50:30 vi gitea-values.yaml 
+  836  2025-05-24 20:51:07 microk8s helm3 uninstall -n gitea gitea
+  837  2025-05-24 20:51:22 kubectl get all -n gitea
+  838  2025-05-24 20:51:51 microk8s helm3 install gitea ./gitea-chart/gitea -n gitea -f gitea-values.yaml
+  839  2025-05-24 20:51:59 kubectl get all -n gitea
+  840  2025-05-24 20:52:44 microk8s kubectl exec -n gitea gitea-postgresql-ha-pgpool-575df85cf-bl575 -- printenv | grep hostname
+  841  2025-05-24 20:52:58 microk8s kubectl exec -n gitea gitea-postgresql-ha-pgpool-5f5ffd646-gbzjz -- printenv | grep hostname
+  842  2025-05-24 20:53:15 kubectl get all -n gitea
+  843  2025-05-24 20:53:37 kubectl logs -n gitea gitea-postgresql-ha-pgpool-5f5ffd646-gbzjz
+  844  2025-05-24 20:54:23 kubectl get all -n gitea
+  845  2025-05-24 20:56:11 kubectl describe -n gitea gitea-postgresql-ha-pgpool-5f5ffd646-gbzjz
+  846  2025-05-24 20:56:24 kubectl describe -n gitea pod/gitea-postgresql-ha-pgpool-5f5ffd646-gbzjz
+  847  2025-05-24 21:00:16 microk8s helm3 get values gitea -n gitea --all
+  848  2025-05-24 21:00:41 microk8s helm3 get values gitea -n gitea --all | less
+  849  2025-05-24 21:05:40 microk8s helm3 get values gitea -n gitea --all > all.yaml
+  850  2025-05-24 21:05:48 vi all.yaml
+  851  2025-05-24 21:06:11 cat all.yaml
+  852  2025-05-24 21:06:28 vi
+  853  2025-05-24 21:06:34 vi all.yaml 
+  854  2025-05-25 12:32:07 rm all.yaml 
+  855  2025-05-25 12:32:16 vi gitea-values.yaml 
+  856  2025-05-25 12:33:19 kubectl get all -n gitea
+  857  2025-05-25 12:33:49 microk8s helm3 uninstall -n gitea gitea
+  858  2025-05-25 12:33:52 kubectl get all -n gitea
+  859  2025-05-25 12:34:10 microk8s helm3 install gitea ./gitea-chart/gitea -n gitea -f gitea-values.yaml
+  860  2025-05-25 12:34:16 kubectl get all -n gitea
+  861  2025-05-25 12:34:51 kubectl logs -n gitea pod/gitea-postgresql-ha-pgpool-68696f5c8b-9jd4v
+  862  2025-05-25 12:35:41 kubectl get all -n gitea
+  863  2025-05-25 12:36:35 microk8s helm3 uninstall -n gitea gitea
+  864  2025-05-25 12:37:08 microk8s helm3 install gitea gitea-charts/gitea -n gitea -f gitea-values.yaml
+  865  2025-05-25 12:37:13 kubectl get all -n gitea
+  866  2025-05-25 12:37:22 microk8s helm3 install gitea gitea-charts/gitea -n gitea -f gitea-values.yaml
+  867  2025-05-25 12:37:26 kubectl get all -n gitea
+  868  2025-06-10 07:41:56 sudo -i
+  869  2025-06-10 07:43:47 ls -la
+  870  2025-06-10 07:44:42 mv innotech\ -deployment.yaml innotech-deployment.yaml 
+  871  2025-06-10 07:44:47 ls -la
+  872  2025-06-10 07:45:41 git commit -m "refactor"
+  873  2025-06-10 07:45:51 git remote -v
+  874  2025-06-10 07:46:32 cd ..
+  875  2025-06-10 07:46:53 pwd
+  876  2025-06-10 07:47:10 cd snap/
+  877  2025-06-10 07:47:15 cd microk8s/
+  878  2025-06-10 07:47:24 cd ..
+  879  2025-06-10 07:47:34 sudo snap refresh
+  880  2025-06-10 07:47:44 ls -la
+  881  2025-06-10 08:02:39 git remptes -v
+  882  2025-06-10 08:02:41 git rempte -v
+  883  2025-06-10 08:02:50 git remote -v
+  884  2025-06-10 08:03:10 git remote -h
+  885  2025-06-10 08:04:21 git remote update -h
+  886  2025-06-10 08:10:29 git remote set-url origin git@github.com:antoniollv/bc-hybrid-cloud-4.git
+  887  2025-06-10 08:10:32 git remote -v
+  888  2025-06-10 08:11:06 cd 
+  889  2025-06-10 08:11:14 cd .ssh
+  890  2025-06-10 08:11:26 mkdir config
+  891  2025-06-10 08:11:30 cd config
+  892  2025-06-10 08:14:50 vf ..
+  893  2025-06-10 08:14:56 rmdir config
+  894  2025-06-10 08:15:06 cd ..
+  895  2025-06-10 08:15:08 rmdir config
+  896  2025-06-10 08:15:14 vi config
+  897  2025-06-10 08:15:52 vi ~/.ssh/id_rsa_github_antoniollv
+  898  2025-06-10 08:16:28 cd
+  899  2025-06-10 08:17:26 chmod 600 /home/tonete/.ssh/id_rsa_github_antoniollv
+  900  2025-06-11 19:59:24 sudo -i
+  901  2025-06-11 22:29:02 microk8s status --wait-ready
+  902  2025-06-13 20:14:05 microk8s enable dns
+  903  2025-06-13 20:14:30 microk8s enable ingress
+  904  2025-06-13 20:14:44 microk8s enable hostpath-storage
+  905  2025-06-13 20:15:07 microk8s enable helm3
+  906  2025-06-13 20:15:19 microk8s enable cert-manager
+  907  2025-06-13 20:23:32 microk8s status --wait-ready
+  908  2025-06-15 12:27:14 ip a | grep 192.168.88
+  909  2025-06-16 19:34:53 sudo -i
+  910  2025-06-16 19:38:04 kubectl get ns
+  911  2025-06-16 19:39:08 cat nexus3-namespace-pvc.yaml
+  912  2025-06-16 19:39:13 vi nexus3-namespace-pvc.yaml
+  913  2025-06-16 19:40:00 microk8s kubectl apply -f nexus3-namespace-pvc.yaml
+  914  2025-06-16 19:40:06 vi nexus3-namespace-pvc.yaml
+  915  2025-06-16 19:44:23 microk8s kubectl apply -f nexus3-namespace-pvc.yaml
+  916  2025-06-16 19:44:42 vi nexus3-namespace-pvc.yaml
+  917  2025-06-16 19:45:16 microk8s kubectl apply -f nexus3-namespace-pvc.yaml
+  918  2025-06-16 19:47:02 microk8s helm3 repo add stevehipwell https://stevehipwell.github.io/helm-charts/
+  919  2025-06-16 19:47:14 microk8s helm3 repo update
+  920  2025-06-16 19:52:21 vi nexus3-namespace-pvc.yaml
+  921  2025-06-16 20:01:14 vi nexus3-chart-values.yaml
+  922  2025-06-16 20:07:13 export NEXUS3_ADMIN_PASSWORD=Gh123@32Fpq=H2o-
+  923  2025-06-16 20:09:30 microk8s helm3 install nexus3 stevehipwell/nexus3 -f nexus3-chart-values.yaml
+  924  2025-06-16 20:17:39 vi letsencrypt-issuer.yaml 
+  925  2025-06-16 20:25:09 mv letsencrypt-issuer.yaml letsencrypt-clusterissuer.yaml
+  926  2025-06-16 20:26:11 vi letsencrypt-issuer.yaml 
+  927  2025-06-16 20:26:20 vi letsencrypt-clusterissuer.yaml
+  928  2025-06-16 20:26:53 microk8s kubectl apply -f letsencrypt-clusterissuer.yaml
+  929  2025-06-16 20:27:57 vi letsencrypt-clusterissuer.yaml
+  930  2025-06-16 20:34:12 microk8s kubectl create ingress nexus3-ingress   --namespace nexus3   --annotation cert-manager.io/cluster-issuer=letsencrypt   --rule 'nexus3.moradores.es/*=nexus3:8081,tls=nexus3-tls'
+  931  2025-06-16 20:39:40 dig nexus3.moradores.es
+  932  2025-06-16 20:47:14 ss -pltn
+  933  2025-06-16 20:47:23 microk8s kubectl get svc -A | grep ingress
+  934  2025-06-16 20:47:35 microk8s status
+  935  2025-06-16 20:47:59 microk8s kubectl get svc -A 
+  936  2025-06-16 20:52:42 microk8s disable ingress
+  937  2025-06-16 20:53:49 microk8s enable ingress
+  938  2025-06-16 20:53:59 microk8s kubectl get svc -A 
+  939  2025-06-16 20:54:59 microk8s kubectl get pods -A 
+  940  2025-06-16 20:55:26 microk8s kubectl get svc -A 
+  941  2025-06-16 20:56:52 microk8s kubectl get pods -A | grep ingress
+  942  2025-06-16 20:57:15 microk8s kubectl get all -n ingress
+  943  2025-06-16 20:57:41 microk8s kubectl get all -n nexus3
+  944  2025-06-16 20:59:02 microk8s kubectl get all
+  945  2025-06-16 21:00:44 microk8s kubectl get svc -n nexus3
+  946  2025-06-16 21:02:40 microk8s kubectl get ingress -n nexus3
+  947  2025-06-16 21:04:54 microk8s kubectl get svc -A | grep ingres
+  948  2025-06-16 21:05:40 microk8s kubectl get svc -A | grep ingress
+  949  2025-06-16 21:05:44 microk8s kubectl get ingress -n nexus3
+  950  2025-06-16 21:05:51 microk8s kubectl get all
+  951  2025-06-16 21:05:57 microk8s kubectl get all -n nexus3
+  952  2025-06-16 21:06:19 microk8s kubectl get svc -A | grep ingress
+  953  2025-06-16 21:07:30 microk8s kubectl get pods -A | grep ingress
+  954  2025-06-16 21:07:50 microk8s kubectl logs -n ingress nginx-ingress-microk8s-controller-mb9hx
+  955  2025-06-16 21:13:47 microk8s kubectl delete ingress nexus3-ingress -n nexus3
+  956  2025-06-16 21:15:33 microk8s kubectl create ingress nexus3-ingress   --namespace nexus3   --annotation cert-manager.io/cluster-issuer=letsencrypt   --rule 'nexus3.moradores.es/*=nexus3:8081,tls=letsencrypt-account-key
+  957  2025-06-16 21:15:52 microk8s kubectl create ingress nexus3-ingress   --namespace nexus3   --annotation cert-manager.io/cluster-issuer=letsencrypt   --rule 'nexus3.moradores.es/*=nexus3:8081,tls=letsencrypt-account-key'
+  958  2025-06-16 21:16:01 microk8s kubectl get pods -A | grep ingress
+  959  2025-06-16 21:16:07 microk8s kubectl get svc -A | grep ingress
+  960  2025-06-16 21:16:14 microk8s kubectl get svc -A 
+  961  2025-06-16 21:16:54 microk8s kubectl logs -n ingress nginx-ingress-microk8s-controller-mb9hx
+  962  2025-06-16 21:17:35 microk8s kubectl delete ingress nexus3-ingress -n nexus3
+  963  2025-06-16 21:22:35 microk8s kubectl get pods -A | grep ingress
+  964  2025-06-16 21:23:10 microk8s kubectl get all -n nexus3
+  965  2025-06-16 21:23:25 microk8s kubectl get all -n nexux3
+  966  2025-06-16 21:23:29 microk8s kubectl get all 
+  967  2025-06-16 21:23:43 microk8s kubectl get all -n nexus3
+  968  2025-06-16 21:23:56 microk8s kubectl get services -n nexus3
+  969  2025-06-16 21:24:10 microk8s kubectl -n nexus3 descrive 
+  970  2025-06-16 21:24:47 microk8s kubectl descrive namespace nexus3 
+  971  2025-06-16 21:24:52 microk8s kubectl describe namespace nexus3 
+  972  2025-06-16 21:25:17 microk8s kubectl get pods -n nexus3 
+  973  2025-06-16 21:25:42 microk8s kubectl get namespaces
+  974  2025-06-16 21:26:10 kubectle get pods -n nexus3
+  975  2025-06-16 21:26:14 kubectl get pods -n nexus3
+  976  2025-06-16 21:26:21 kubectl get all -n nexus3
+  977  2025-06-16 21:27:01 microk8s reset
+  978  2025-06-16 21:27:06 sudo microk8s reset
+  979  2025-06-16 21:32:09 sudo microk8s stop
+  980  2025-06-16 21:32:28 sudo microk8s start
+  981  2025-06-16 21:32:44 sudo microk8s status
+  982  2025-06-16 21:36:14 microk8s enable ingress
+  983  2025-06-16 21:36:30 microk8s enable cert-manager
+  984  2025-06-16 21:42:49 cat letsencrypt-clusterissuer.yaml 
+  985  2025-06-16 21:44:56 microk8s kubectl get ingressclass
+  986  2025-06-16 21:49:28 microk8s kubectl apply -f letsencrypt-clusterissuer.yaml 
+  987  2025-06-16 21:52:57 microk8s kubectl apply -f nexus3-namespace-pvc.yaml
+  988  2025-06-16 21:53:28 export NEXUS3_ADMIN_PASSWORD=Gh123@32Fpq=H2o-
+  989  2025-06-16 21:54:28 microk8s helm3 install nexus3 stevehipwell/nexus3 -f nexus3-chart-values.yaml
+  990  2025-06-16 21:55:17 kubectl -n nexus3 get all
+  991  2025-06-16 21:55:36 kubectl -n nexus3 get pods
+  992  2025-06-16 21:56:21 vi nexus3-chart-values.yaml 
+  993  2025-06-16 21:56:56 kubectl gel all --namespace all
+  994  2025-06-16 21:57:02 kubectl get all --namespace all
+  995  2025-06-16 21:58:11 microk8s kubectl get all
+  996  2025-06-16 21:58:27 microk8s kubectl get all -n nexus3
+  997  2025-06-16 21:58:40 microk8s kubectl get all namespces
+  998  2025-06-16 21:58:48 microk8s kubectl get namespces
+  999  2025-06-16 21:58:53 microk8s kubectl get namespaces
+ 1000  2025-06-16 21:59:09 microk8s kubectl get all -n default
+ 1001  2025-06-17 07:46:27 microk8s helm3 iunistall nexus3
+ 1002  2025-06-17 07:46:40 microk8s helm3 uninstall nexus3
+ 1003  2025-06-17 07:46:48 export NEXUS3_ADMIN_PASSWORD=Gh123@32Fpq=H2o-
+ 1004  2025-06-17 07:47:07 microk8s helm3 install nexus3 stevehipwell/nexus3 -f nexus3-chart-values.yaml --namespace nexus3
+ 1005  2025-06-17 07:47:17 microk8s helm3 install nexus3 stevehipwell/nexus3 -f nexus3-chart-values.yaml --namespace nexus3
+ 1006  2025-06-17 07:47:34 kubectl get all --namespace nexus3
+ 1007  2025-06-17 07:50:31 microk8s helm3 get values nexus3 --namespace nexus3 --all
+ 1008  2025-06-17 07:51:47 kubectl get all --namespace nexus3
+ 1009  2025-06-17 07:53:19 microk8s kubectl get pvc -n nexus3
+ 1010  2025-06-17 07:54:10 microk8s kubectl describe pvc nexus3-pvc -n nexus3
+ 1011  2025-06-17 07:54:38 microk8s status
+ 1012  2025-06-17 07:55:03 microk8s enable hostpath-storage
+ 1013  2025-06-17 07:55:36 microk8s kubectl describe pvc nexus3-pvc -n nexus3
+ 1014  2025-06-17 07:56:16 microk8s kubectl get pvc -n nexus3
+ 1015  2025-06-17 07:56:53 microk8s kubectl describe pvc data-nexus3-0 -n nexus3
+ 1016  2025-06-17 07:59:59 microk8s helm3 get values nexus3 --namespace nexus3 --all
+ 1017  2025-06-18 19:24:55 apt update
+ 1018  2025-06-18 19:25:03 sudo apt update
+ 1019  2025-06-18 19:25:15 sudo apt upgrade
+ 1020  2025-06-18 19:25:25 sudo snap refresh
+ 1021  2025-06-18 19:25:43 microk8s helm3 get values nexus3 --namespace nexus3 --all
+ 1022  2025-06-18 19:26:22 microk8s kubectl get pvc -n nexus3
+ 1023  2025-06-18 19:27:43 microk8s helm3 uninstall nexus3 --namespace nexus3
+ 1024  2025-06-18 19:27:58 microk8s kubectl get pvc -n nexus3
+ 1025  2025-06-18 19:28:29 ls nexu*
+ 1026  2025-06-18 19:28:46 cat nexus3-namespace-pvc.yaml
+ 1027  2025-06-18 19:29:18 microk8s kubectl delete -f nexus3-namespace-pvc.yaml 
+ 1028  2025-06-18 19:29:45 microk8s kubectl get pvc -n nexus3
+ 1029  2025-06-18 19:29:55 microk8s kubectl get pvc --all-namespaces
+ 1030  2025-06-18 19:30:33 microk8s kubectl delete pvc data-nexus3-0
+ 1031  2025-06-18 19:30:52 microk8s kubectl get pods --all-namespaces
+ 1032  2025-06-18 19:31:33 microk8s kubectl apply -f nexus3-namespace-pvc.yaml 
+ 1033  2025-06-18 19:31:45 vi nexus3-chart-values.yaml 
+ 1034  2025-06-18 19:33:05 export NEXUS3_ADMIN_PASSWORD=Gh123@32Fpq=H2o-
+ 1035  2025-06-18 19:33:17 vi nexus3-chart-values.yaml 
+ 1036  2025-06-18 19:33:31 export NEXUS3_ADMIN_PASSWORD=Gh123@32Fpq=H2o-
+ 1037  2025-06-18 19:33:45 microk8s helm3 install nexus3 stevehipwell/nexus3 -f nexus3-chart-values.yaml --namespace nexus3
+ 1038  2025-06-18 19:34:10 microk8s kubectl get pvc -n nexus3
+ 1039  2025-06-18 19:35:08 microk8s helm3 get values nexus3 --namespace nexus3 --all
+ 1040  2025-06-18 19:37:30 vi nexus3-chart-values.yaml 
+ 1041  2025-06-18 19:38:20 microk8s kubectl get pvc -n nexus3
+ 1042  2025-06-18 19:41:14 microk8s helm3 uninstall nexus3 --namespace nexus3
+ 1043  2025-06-18 19:41:20 microk8s kubectl get pvc -n nexus3
+ 1044  2025-06-18 19:42:00 microk8s helm3 uninstall nexus3 --namespace nexus3
+ 1045  2025-06-18 19:42:40 microk8s kubectl delete -f nexus3-namespace-pvc.yaml 
+ 1046  2025-06-18 19:42:53 microk8s kubectl get pvc -n nexus3
+ 1047  2025-06-18 19:43:03 microk8s kubectl get pvc --all-namespaces
+ 1048  2025-06-18 19:43:13 vi nexus3-namespace-pvc.yaml 
+ 1049  2025-06-18 19:45:18 microk8s kubectl apply -f nexus3-namespace-pvc.yaml
+ 1050  2025-06-18 19:45:28 export NEXUS3_ADMIN_PASSWORD=Gh123@32Fpq=H2o-
+ 1051  2025-06-18 19:46:11 microk8s helm3 install nexus3 stevehipwell/nexus3 -f nexus3-chart-values.yaml --namespace nexus3
+ 1052  2025-06-18 19:46:19 microk8s kubectl get pvc --all-namespaces
+ 1053  2025-06-18 19:46:58 kubectl -n nexus3 get pods
+ 1054  2025-06-18 19:47:13 kubectl -n nexus3 get -a
+ 1055  2025-06-18 19:47:19 kubectl -n nexus3 get --all
+ 1056  2025-06-18 19:47:33 kubectl -n nexus3 get-all
+ 1057  2025-06-18 19:47:42 kubectl -n nexus3 get all
+ 1058  2025-06-18 19:49:32 microk8s kubectl get events -n nexus3 --sort-by=.metadata.creationTimestamp
+ 1059  2025-06-18 19:50:14 kubectl -n nexus3 get all
+ 1060  2025-06-18 19:53:04 microk8s kubectl get pods -n cert-manager -o wide && microk8s kubectl get all -n cert-manager && microk8s kubectl describe clusterissuer && microk8s kubectl get certificate -A
+ 1061  2025-06-18 19:57:56 vi nexus3-ingress.yaml
+ 1062  2025-06-18 19:58:52 microk8s kubectl apply -f nexus3-ingress.yaml
+ 1063  2025-06-18 20:00:39 microk8s kubectl get ingress -n nexus3
+ 1064  2025-06-18 20:03:06 microk8s kubectl get certificaterequests -A
+ 1065  2025-06-18 20:07:20 microk8s kubectl get ingress -n nexus3
+ 1066  2025-06-18 20:07:25 microk8s kubectl get certificaterequests -A
+ 1067  2025-06-18 20:07:34 microk8s kubectl get ingress -n nexus3
+ 1068  2025-06-18 20:07:42 microk8s kubectl get certificaterequests -A
+ 1069  2025-06-18 20:08:43 microk8s kubectl get events -n cert-manager --sort-by=.metadata.creationTimestamp | tail -20
+ 1070  2025-06-18 20:09:01 microk8s kubectl get pods -n cert-manager
+ 1071  2025-06-18 20:09:30 microk8s kubectl describe clusterissuer letsencrypt
+ 1072  2025-06-18 20:09:55 microk8s kubectl get pods -n cert-manager
+ 1073  2025-06-18 20:11:23 microk8s kubectl -n cert-manager logs deploy/cert-manager-77fb85564-bdd4p
+ 1074  2025-06-18 20:11:39 microk8s kubectl -n cert-manager logs deploy/cert-manager
+ 1075  2025-06-18 20:12:09 microk8s kubectl get certificaterequests -A
+ 1076  2025-06-18 20:12:50 microk8s kubectl -n cert-manager logs deploy/cert-manager
+ 1077  2025-06-18 20:19:35 vi nexus3-ingress.yaml
+ 1078  2025-06-18 20:20:16 microk8s kubectl apply -f nexus3-ingress.yaml
+ 1079  2025-06-18 20:20:27 microk8s kubectl get certificaterequests -A
+ 1080  2025-06-18 20:20:57 microk8s kubectl describe clusterissuer letsencrypt
+ 1081  2025-06-18 20:21:13 microk8s kubectl get ingress -n nexus3
+ 1082  2025-06-18 20:24:57 microk8s kubectl delete ingress --all -n nexus3
+ 1083  2025-06-18 20:25:09 microk8s kubectl apply -f nexus3-ingress.yaml
+ 1084  2025-06-18 20:25:15 microk8s kubectl get ingress -n nexus3
+ 1085  2025-06-18 20:25:26 microk8s kubectl get certificaterequests -A
+ 1086  2025-06-18 20:25:39 microk8s kubectl -n cert-manager logs deploy/cert-manager
+ 1087  2025-06-18 22:07:07 microk8s kubectl get certificaterequests -A
+ 1088  2025-06-18 22:14:09 microk8s kubectl delete certificate -n nexus3 --all
+ 1089  2025-06-18 22:14:13 microk8s kubectl get certificaterequests -A
+ 1090  2025-06-18 22:14:29 microk8s kubectl -n cert-manager logs deploy/cert-manager
+ 1091  2025-06-18 22:15:04 date
+ 1092  2025-06-18 22:15:17 microk8s kubectl get certificaterequests -A
+ 1093  2025-06-18 22:28:54 microk8s kubectl get ingress -n nexus3
+ 1094  2025-06-18 22:29:31 microk8s kubectl describe ingress nexus3-ingress -n nexus3
+ 1095  2025-06-18 22:31:43 microk8s kubectl get certificate,certificaterequest,order,challenge -n nexus3
+ 1096  2025-06-18 22:32:20 microk8s kubectl logs -n cert-manager deploy/cert-manager | tail -n 50
+ 1097  2025-06-18 22:33:03 microk8s kubectl describe clusterissuer letsencrypt
+ 1098  2025-06-18 22:33:38 microk8s kubectl get secret -n nexus3 nexus3-tls -o yaml
+ 1099  2025-06-18 22:36:50 microk8s kubectl get ingress -n nexus3
+ 1100  2025-06-18 22:37:48 microk8s kubectl describe ingress cm-acme-http-solver-mrx84 -n nexus3
+ 1101  2025-06-18 22:38:47 microk8s kubectl get svc -n nexus3
+ 1102  2025-06-18 22:39:20 microk8s kubectl describe svc cm-acme-http-solver-9qlvg
+ 1103  2025-06-18 22:39:28 microk8s kubectl describe svc cm-acme-http-solver-9qlvg -n nexus3
+ 1104  2025-06-18 22:42:00 microk8s kubectl run -it --rm --restart=Never curl-test --image=alpine -- sh
+ 1105  2025-06-22 15:44:51 microk8s kubectl -n nexus3 describr pods
+ 1106  2025-06-22 15:48:35 microk8s kubectl -n nexus3 --container -it --exec -- /binbash
+ 1107  2025-06-22 15:48:50 microk8s kubectl exec -it -n nexus3 --container -- /binbash
+ 1108  2025-06-22 15:49:08 microk8s kubectl exec -it -n nexus3 --container nexus3 -- /binbash
+ 1109  2025-06-22 15:49:18 microk8s kubectl exec -it -n nexus3 -- /binbash
+ 1110  2025-06-22 15:50:08 microk8s kubectl -n nexus3 get pods
+ 1111  2025-06-22 15:50:15 microk8s kubectl -n nexus3 get pods
+ 1112  2025-06-22 15:50:30 microk8s kubectl -n nexus3 describe pods
+ 1113  2025-06-22 15:51:05 microk8s kubectl exec -it -n nexus3 --container nexus3-0 -- /binbash
+ 1114  2025-06-22 15:51:48 microk8s kubectl exec -it -n nexus3 -c nexus3-0 -- /binbash
+ 1115  2025-06-22 15:53:53 microk8s kubectl exec -nexus3 --stdin --tty nexus3-0 -- /binbash
+ 1116  2025-06-22 15:54:05 microk8s kubectl exec -n nexus3 --stdin --tty nexus3-0 -- /binbash
+ 1117  2025-06-22 15:54:10 microk8s kubectl exec -n nexus3 --stdin --tty nexus3-0 -- /bin/bash
+ 1118  2025-06-22 18:56:05 export HISTTIMEFORMAT="%F %T " > history.log
+ 1119  2025-06-22 19:00:53 mv
+ 1120  2025-06-22 19:01:02 mv history.log bc-hybrid-cloud-4/
+ 1121  2025-06-22 19:01:12 cd bc-hybrid-cloud-4/
+ 1122  2025-06-22 19:01:43 git add .
+ 1123  2025-06-22 19:02:21 git commit -m "Add history"
+ 1124  2025-06-22 19:02:30 git push
+ 1125  2025-06-22 19:02:53 git status
+ 1126  2025-06-22 19:03:03 git branch -a
+ 1127  2025-06-22 19:13:57 git fetch
+ 1128  2025-06-22 19:14:11 git pull
+ 1129  2025-06-22 22:11:24 export HISTTIMEFORMAT="%F %T "
+ 1130  2025-06-22 22:11:50 cat history.log 
+ 1131  2025-06-22 22:11:55 rm history.log 
+ 1132  2025-06-22 22:11:56 history > history.log 
