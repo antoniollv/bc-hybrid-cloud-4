@@ -556,7 +556,7 @@ Si la construcción es correcta, pulsa en el número de la construcción, veras 
 
 #### Despliegue de un servicio Nexus en MicroK8s
 
-Antes de abordar la siguiente etapa vamos a abordar el despliegue de un servicio **Nexus** en **MicroK8s**
+Antes de abordar la siguiente etapa vamos a realizar el despliegue de un servicio **Nexus** en **MicroK8s**
 
 **Nexus** proporciona un repositorios de artefactos **Maven** y de imágenes de contenedor. Utilizaremos este servicio para publicar los artefactos generado en nuestra **_Pipeline_**
 
@@ -1165,12 +1165,10 @@ post {
         }
     }
 ```
+
 user is not authorized to perform: iam:PassRole on resourcd: arn:aws:iam::***:role/service-role/my-test-lambda-role-xxxxxxxx with a explici deny in an identity-based policy
 
 ---
-
-
-
 
 Secreto para docker registry
 
@@ -1180,7 +1178,6 @@ kubectl create secret docker-registry ecr-secret \
   --docker-password="$(aws ecr get-login-password)" \
   --docker-email=antonio.lledo@convotis.com
 
-
 port-forward
 
 kubectl port-forward service/jenkins 8080:8080
@@ -1189,10 +1186,7 @@ Log
 
 kubectl get events -n namespace
 
-
-
 microk8s config > ~/.kube/config
-
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
