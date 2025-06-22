@@ -1,0 +1,35 @@
+replicaCount: 1
+
+persistence:
+  enabled: true
+  existingClaim: nexus3-pvc
+  accessMode: ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 1Gi
+  limits:
+    cpu: 500m
+    memory: 2Gi
+
+service:
+  type: ClusterIP
+  port: 8081
+
+affinity: {}
+tolerations: []
+nodeSelector: {}
+
+nexus:
+  adminPassword: "${NEXUS3_ADMIN_PASSWORD}"
+
+livenessProbe:
+  enabled: true
+readinessProbe:
+  enabled: true
+
+nexusProxy:
+  enabled: false
+
+namespaceOverride: nexus3
