@@ -312,3 +312,14 @@ spec:
 3. Login with the password from step 1 and the username: admin
 4. Configure security realm and authorization strategy
 5. Use Jenkins Configuration as Code by specifying configScripts in your values.yaml file, see documentation: http://jenkins.moradores.es/configuration-as-code and examples: https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos
+
+
+microk8s kubectl create ingress my-ingress \
+    --annotation cert-manager.io/issuer=letsencrypt \
+    --rule 'my-service.example.com/*=my-service:80,tls=my-service-tls'
+
+
+microk8s kubectl create ingress jenkins-ingress \
+    --namespace jenkins \
+    --annotation cert-manager.io/issuer=letsencrypt \
+    --rule 'jenkins.moradores.es/*=jenkins:8080,tls=jenkins-tls'
